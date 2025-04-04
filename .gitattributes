@@ -1,2 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+# Set the line endings to LF for all text files
+* eol=lf
