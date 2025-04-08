@@ -1,3 +1,4 @@
+from helpers import lookup, lookup_overview
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -20,24 +21,35 @@ def create_connection():
     )
     return connection 
 
-@app.route('/')
+# @app.route('/')
+# def index():
+
+#     connection = create_connection()
+#     cursor = connection.cursor()
+    
+#     cursor.execute("""
+#         SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE
+#         FROM INFORMATION_SCHEMA.COLUMNS
+#         WHERE TABLE_SCHEMA = 'defaultdb';
+#     """)
+    
+#     schema_data = cursor.fetchall()
+
+#     cursor.close()
+#     connection.close()
+
+#     return render_template('index.html', schema_data=schema_data)
+
+@app.route("/", methods=["GET", "POST"])
 def index():
+    symbol = ""
+    price = None
 
-    connection = create_connection()
-    cursor = connection.cursor()
-    
-    cursor.execute("""
-        SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE
-        FROM INFORMATION_SCHEMA.COLUMNS
-        WHERE TABLE_SCHEMA = 'defaultdb';
-    """)
-    
-    schema_data = cursor.fetchall()
+    if request.method == "POST":
+        symbol = request.form["symbol"]
+        price = lookup(symbol)
 
-    cursor.close()
-    connection.close()
-
-    return render_template('index.html', schema_data=schema_data)
+    return render_template("index.html", price=price)
 
 # Remove for deployment
 if __name__ == '__main__':

@@ -6,12 +6,15 @@
     <title>Index</title>
 </head>
 <body>
-    {% for table, column, data_type in schema_data %}
-        <tr>
-            <td>{{ table }}</td>
-            <td>{{ column }}</td>
-            <td>{{ data_type }}</td>
-        </tr>
-    {% endfor %}
+    <form method="POST" action="/">
+        <label for="symbol">Symbol:</label>
+        <input type="text" id="symbol" name="symbol" value="{{ symbol }}">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if price %}
+        <h2>Stock Price {{ price.symbol }}:</h2>
+        <p>Price: ${{ price.price }}</p>
+    {% endif %}
 </body>
 </html>
