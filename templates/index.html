@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
-</head>
-<body>
-    <form method="POST" action="/">
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+        <form method="POST" action="/">
         <label for="symbol">Symbol:</label>
         <input type="text" id="symbol" name="symbol" value="{{ symbol }}">
         <button type="submit">Search</button>
@@ -16,5 +15,4 @@
         <h2>Stock Price {{ price.symbol }}:</h2>
         <p>Price: ${{ price.price }}</p>
     {% endif %}
-</body>
-</html>
+{% endblock %}
