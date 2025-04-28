@@ -60,12 +60,13 @@ def lookup(symbol):
 
         # Get the recent closing price
         time_series = quote_data.get("Time Series (5min)", {})
-        last_time = next(iter(time_series))
-        price = time_series[last_time]["4. close"]
-        return {
-            "price": price,
-            "symbol": symbol.upper()
-        }
+        if time_series: 
+            last_time = next(iter(time_series))
+            price = time_series[last_time]["4. close"]
+            return {
+                "price": price,
+                "symbol": symbol.upper()
+            }
                   
     except requests.RequestException as e:
         print(f"Request error: {e}")

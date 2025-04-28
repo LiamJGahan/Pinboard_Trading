@@ -86,10 +86,20 @@ def logout():
 @app.route("/", methods=["GET", "POST"])
 def index():
     symbol = ""
+    price = None
+    overview = None
 
     if request.method == "POST":
         symbol = request.form["symbol"]
-        card_list.append(lookup(symbol) )
+
+        price = lookup(symbol)
+        overview = lookup_overview(symbol)
+
+        if price != None and overview != None:
+            card = {**price, **overview}
+            card_list.append(card)
+        else:
+            return apology("Alphavantage API limit reached", 400)
 
     return render_template("index.html", card_list=card_list)
 

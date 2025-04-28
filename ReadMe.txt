@@ -4,10 +4,11 @@ CS50 Harvardx
 -Used MySQL table queries from finance for pinboard database (transactions, users). (4/4/2025)
 -(finance) login, logout, apology and login_required imported to project with some minor adjustments for postgres. (25/04/2025)
 
-https://www.w3schools.com/
+https://www.w3schools.com/python
 W3Schools
 -Understanding Try:/Except: (7/4/2025)
 -Understanding .get (7/4/2025)
+-Reasearching how to merge dictionaries. (28/04/2025)
 
 https://chatgpt.com/
 Chat GPT
@@ -39,3 +40,12 @@ LiamJGahan
 https://ttl255.com/jinja2-tutorial-part-2-loops-and-conditionals/
 ttl255.com
 -Reasearch on jinja2. (28/04/2025)
+
+https://www.favicon.cc/
+favicon.cc
+-Favicon creation (28/04/2025)
+
+https://www.alphavantage.co
+Alphavantage
+-Linked 2 APIs to my project. (7/4/2025)
+-Reasearched the key limit of the APIs I am using. (28/04/2025)
