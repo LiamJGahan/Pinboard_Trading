@@ -11,8 +11,10 @@ W3Schools
 
 https://chatgpt.com/
 Chat GPT
--Finding database hosting providers (Aiven). (4/4/2025)
+-Finding database hosting providers. (Aiven). (4/4/2025)
 -Assistance in understanding postgres. (25/04/2025)
+-Goal milestones and productivity assistance. (27/04/2025)
+-Bugfinding and troubleshooting assistance. (28/04/2025)
 
 https://www.pythonhelp.org/tutorials/first-key-dictionary-python/
 Python Help
@@ -33,3 +35,7 @@ bmaupin
 https://github.com/SJK9476?tab=repositories
 LiamJGahan
 -Reasearching various code snippets with previous work I have done. (25/04/2025)
+
+https://ttl255.com/jinja2-tutorial-part-2-loops-and-conditionals/
+ttl255.com
+-Reasearch on jinja2. (28/04/2025)

@@ -1,4 +1,4 @@
-from helpers import lookup, lookup_overview
+from helpers import apology, lookup, lookup_overview
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -24,6 +24,8 @@ def create_connection():
         database=os.getenv('DB_NAME'),
     )
     return connection 
+
+card_list = list()
 
 # Citation - Harvardx CS50x Finance
 @app.route("/login", methods=["GET", "POST"])
@@ -84,13 +86,12 @@ def logout():
 @app.route("/", methods=["GET", "POST"])
 def index():
     symbol = ""
-    price = None
 
     if request.method == "POST":
         symbol = request.form["symbol"]
-        price = lookup(symbol)
+        card_list.append(lookup(symbol) )
 
-    return render_template("index.html", price=price)
+    return render_template("index.html", card_list=card_list)
 
 # Remove for deployment
 if __name__ == '__main__':

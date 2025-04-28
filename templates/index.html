@@ -5,14 +5,28 @@
 {% endblock %}
 
 {% block main %}
-        <form method="POST" action="/">
+    <form method="POST" action="/">
         <label for="symbol">Symbol:</label>
         <input type="text" id="symbol" name="symbol" value="{{ symbol }}">
         <button type="submit">Search</button>
     </form>
 
-    {% if price %}
-        <h2>Stock Price {{ price.symbol }}:</h2>
-        <p>Price: ${{ price.price }}</p>
-    {% endif %}
+    <div class="container">
+        {%  for card in card_list %}
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card text-center mb-4">
+                    <div class="card-title mt-2 border-bottom">
+                        <h5>{{ card.symbol }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">{{ card.symbol }}</h6>
+                        <p class="card-text">Price: ${{ card.price }}</p>
+                        <button class="btn btn-primary">View Analytics</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 {% endblock %}
