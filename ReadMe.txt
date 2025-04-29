@@ -53,3 +53,8 @@ Alphavantage
 https://dribbble.com/tags/card-ui
 dribbble.com
 -Reasearch on card design. (29/04/2025)
+
+https://dbeaver.io/
+DBeaver
+-Used to recreate user and transaction tables. (25/04/2025)
+-Used to create stocks table. (29/04/2025)

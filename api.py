@@ -25,8 +25,6 @@ def create_connection():
     )
     return connection 
 
-card_list = list()
-
 # Citation - Harvardx CS50x Finance
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -82,24 +80,54 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
-# Temp index
+# index
 @app.route("/", methods=["GET", "POST"])
 def index():
-    symbol = ""
-    price = None
-    overview = None
+    user_id = session.get("user_id")
+    connection = create_connection()
+    card_list = []
 
     if request.method == "POST":
-        symbol = request.form["symbol"]
+        symbol = request.form["symbol"].upper()
+
+        if not symbol:
+            return apology("Must enter symbol", 400)
 
         price = lookup(symbol)
         overview = lookup_overview(symbol)
 
-        if price != None and overview != None:
+        if price and overview:
             card = {**price, **overview}
-            card_list.append(card)
+
+            cursor = connection.cursor()
+
+            # Check if stock exists, if not, add a new one
+            cursor.execute("SELECT * FROM stocks WHERE user_id = %s AND symbol = %s", (user_id, symbol))
+            stock = cursor.fetchone()
+
+            if not stock:
+                cursor.execute("""INSERT INTO stocks (user_id, symbol, name, price, industry, description, market_cap)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)""", (user_id, card["symbol"], card["name"], card["price"], card["industry"], card["description"], card["market_cap"]))
+                connection.commit()
+
+            cursor.close()
         else:
-            return apology("Alphavantage API limit reached", 400)
+            return apology("Alphavantage API limit reached", 503)
+
+    # Get stocks
+    cursor2 = connection.cursor()
+    cursor2.execute("SELECT symbol, name, price FROM stocks WHERE user_id = %s", (user_id,))
+    rows = cursor2.fetchall()
+
+    for row in rows:
+        card_list.append({
+            "symbol": row[0],
+            "name": row[1],
+            "price": row[2],
+        })
+
+    cursor2.close()
+    connection.close()
 
     return render_template("index.html", card_list=card_list)
 

@@ -1,0 +1,33 @@
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL UNIQUE,
+    hash TEXT NOT NULL,
+    cash NUMERIC NOT NULL DEFAULT 10000.00
+);
+
+CREATE TABLE transactions (
+    order_id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    transaction_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    shares NUMERIC NOT NULL,
+    symbol TEXT NOT NULL,
+    price NUMERIC NOT NULL,
+    transaction_total NUMERIC NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE stocks (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    symbol TEXT NOT NULL,
+    name TEXT,
+    price NUMERIC,
+    industry TEXT,
+    description TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    UNIQUE (user_id, symbol)
+);
+
+ALTER TABLE stocks
+ADD COLUMN market_cap NUMERIC;
