@@ -49,3 +49,7 @@ https://www.alphavantage.co
 Alphavantage
 -Linked 2 APIs to my project. (7/4/2025)
 -Reasearched the key limit of the APIs I am using. (28/04/2025)
+
+https://dribbble.com/tags/card-ui
+dribbble.com
+-Reasearch on card design. (29/04/2025)
