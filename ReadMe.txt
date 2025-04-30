@@ -14,8 +14,9 @@ https://chatgpt.com/
 Chat GPT
 -Finding database hosting providers. (Aiven). (4/4/2025)
 -Assistance in understanding postgres. (25/04/2025)
--Goal milestones and productivity assistance. (27/04/2025)
--Bugfinding and troubleshooting assistance. (28/04/2025)
+-Goal milestones and productivity assistance. (27/04/2025) continued
+-Bugfinding and troubleshooting assistance. (28/04/2025) continued
+-Psycopg2 assistance (30/04/2025)
 
 https://www.pythonhelp.org/tutorials/first-key-dictionary-python/
 Python Help
@@ -58,3 +59,11 @@ https://dbeaver.io/
 DBeaver
 -Used to recreate user and transaction tables. (25/04/2025)
 -Used to create stocks table. (29/04/2025)
+
+https://www.geeksforgeeks.org/get-current-timestamp-using-python/
+geeksforgeeks.org
+-Reasearching how to get the date/datetime using python. (30/04/2025)
+
+https://www.psycopg.org/docs/
+-Reasearch on psycopg. (25/04/2025)
+-Reasearch on realdict for psycopg2. (30/04/2025)

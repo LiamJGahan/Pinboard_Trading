@@ -1,9 +1,9 @@
-from helpers import apology, lookup, lookup_overview
+from helpers import apology, lookup, lookup_overview, update_cards
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash
 import psycopg2
-from dotenv import load_dotenv
+from psycopg2.extras import RealDictCursor
 import os
 
 # Configure application
@@ -22,6 +22,7 @@ def create_connection():
         user=os.getenv('DB_USER'),
         password=os.getenv('DB_PASSWORD'),
         database=os.getenv('DB_NAME'),
+        cursor_factory=RealDictCursor,
     )
     return connection 
 
@@ -37,11 +38,11 @@ def login():
     if request.method == "POST":
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 400)
+            return apology("Must provide username", 400)
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 400)
+            return apology("Must provide password", 400)
        
         # Query database for username
         cur = create_connection()
@@ -55,12 +56,12 @@ def login():
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(
-            rows[0][2], request.form.get("password") 
+            rows[0]["hash"], request.form.get("password") 
         ):
-            return apology("invalid username and/or password", 400)
+            return apology("Invalid username and/or password", 400)
 
         # Remember which user has logged in
-        session["user_id"] = rows[0][0]
+        session["user_id"] = rows[0]["id"]
 
         # Redirect user to home page
         return redirect("/")
@@ -88,9 +89,15 @@ def index():
     card_list = []
 
     if request.method == "POST":
+
+        if user_id == None:
+            connection.close()
+            return apology("Must log in", 400)
+
         symbol = request.form["symbol"].upper()
 
         if not symbol:
+            connection.close()
             return apology("Must enter symbol", 400)
 
         price = lookup(symbol)
@@ -112,24 +119,28 @@ def index():
 
             cursor.close()
         else:
-            return apology("Alphavantage API limit reached", 503)
+            connection.close()
+            return apology("Alphavantage API limit reached", 503)        
 
     # Get stocks
     cursor2 = connection.cursor()
-    cursor2.execute("SELECT symbol, name, price FROM stocks WHERE user_id = %s", (user_id,))
+    cursor2.execute("SELECT symbol, name, price, timestamp FROM stocks WHERE user_id = %s", (user_id,))
     rows = cursor2.fetchall()
+    cursor2.close()
+
+    # Update the index cards if new day
+    update_cards(rows, connection)
 
     for row in rows:
         card_list.append({
-            "symbol": row[0],
-            "name": row[1],
-            "price": row[2],
+            "symbol": row["symbol"],
+            "name": row["name"],
+            "price": row["price"],
         })
 
-    cursor2.close()
     connection.close()
 
-    return render_template("index.html", card_list=card_list)
+    return render_template("index.html", card_list=card_list)   
 
 # Remove for deployment
 if __name__ == '__main__':

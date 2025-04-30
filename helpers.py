@@ -1,11 +1,10 @@
+import datetime
 from flask import redirect, render_template, session
 from functools import wraps
 from dotenv import load_dotenv
 import os
 import requests
 from werkzeug.security import generate_password_hash
-
-#print(generate_password_hash("pass"))
 
 load_dotenv()
 api_key = os.getenv('ALPHAVANTAGE_KEY')
@@ -112,3 +111,40 @@ def lookup_overview(symbol):
         print(f"Data parsing error: {e}")
     
     return None
+
+def update_cards(rows, connection):
+
+    if not rows:
+        return # No card_list
+    
+    user_id = session.get("user_id")
+
+    if user_id == None:
+        connection.close()
+        return apology("Must log in", 400)
+
+    for stock in rows:
+        if stock["timestamp"].date() != datetime.datetime.now().date():
+            
+            price = lookup(stock["symbol"])
+            overview = lookup_overview(stock["symbol"])
+
+            if price and overview:
+                updated_card = {**price, **overview}
+
+                cursor = connection.cursor()
+                cursor.execute("""UPDATE stocks SET name = %s, price = %s, industry = %s, description = %s, 
+                               market_cap = %s, timestamp = %s WHERE user_id = %s AND symbol = %s""", 
+                (
+                    updated_card["name"],
+                    updated_card["price"],
+                    updated_card["industry"],
+                    updated_card["description"],
+                    updated_card["market_cap"],
+                    updated_card["timestamp"],
+                    user_id,
+                    stock["symbol"]
+                ))
+                connection.commit()
+
+                cursor.close()
