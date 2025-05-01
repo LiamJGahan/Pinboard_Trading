@@ -71,6 +71,7 @@ https://www.psycopg.org/docs/
 https://getbootstrap.com/docs/5.3/getting-started/introduction/
 BootStrap
 -Reasearch on position translate. (30/04/2025)
+-Reasearch on d-flex. (30/04/2025)
 -Reasearch on shadow. (01/05/2025)
 
 https://icons.getbootstrap.com/
@@ -80,3 +81,7 @@ BootStrap icons
 https://www.youtube.com/watch?app=desktop&v=UGtB7i9gD4s
 Coding Yaar
 -Learning how to use BootStrapicons in buttons. (01/05/2025)
+
+https://ico.org.uk/for-organisations/advice-for-small-organisations/create-your-own-privacy-notice/
+ico.org.uk
+-Generated a privacy policy. (01/05/2025)

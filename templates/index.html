@@ -4,20 +4,24 @@
     Index
 {% endblock %}
 
-{% block main %}
-    <div class="mb-4">
-        <form method="POST" action="/">
-            <label for="symbol">Symbol:</label>
-            <input type="text" id="symbol" name="symbol" value="{{ symbol }}">
-            <button class="btn btn-primary mb-1" type="submit">Pin</button>
-        </form>
-    </div>
+{% block nav %}
+    <nav class="border navbar navbar-expand-md" style="background-color: wheat !important;">
+        <div class="container d-flex justify-content-center align-items-center" style="min-height: 40px;">
+            <form method="POST" action="/" class="d-flex flex-column flex-md-row align-items-center gap-2">
+                <label for="symbol" class="form-label mb-0 me-2">Create Card:</label>
+                <input type="text" id="symbol" name="symbol" value="{{ symbol }}" placeholder="Symbol" class="form-control me-2" style="width: 150px;">
+                <button class="btn btn-outline-dark" type="submit">Pin</button>
+            </form>
+        </div>
+    </nav>
+{% endblock %}
 
+{% block main %}
     <div class="container">
         <div class="row justify-content-center">
             {% for card in card_list %}
             <div class="col-sm-6 col-md-4 col-lg-3 d-flex">
-                <div class="card text-center mb-4 w-100 shadow">
+                <div class="card text-center mb-4 w-100 shadow border-4 border-primary">
     
                     <div class="card-title mt-2 border-bottom px-3 position-relative" style="height: 40px;">
                         <h5 class="position-absolute top-50 start-50 translate-middle m-0">
@@ -32,7 +36,9 @@
     
                     <div class="card-body">
                         <h6 class="card-subtitle mb-2 text-muted">{{ card.name }}</h6>
-                        <p class="card-text">Price: ${{ card.price }}</p>
+                        <p class="card-text">Daily Price: ${{ card.price }}</p>
+                        <p class="card-text m-0">Amount: $0</p>
+                        <p class="card-text">Total Value: $0</p>
                         <button class="btn btn-primary mb-1">Trade</button>
                         <button class="btn btn-secondary mb-1">Analytics</button>
                     </div>

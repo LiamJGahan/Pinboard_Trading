@@ -168,6 +168,12 @@ def account():
 
     return render_template("account.html")
 
+@app.route("/privacy")
+def privacy():
+    """Display Privacy Policy"""
+
+    return render_template("privacy.html")
+
 # Remove for deployment
 if __name__ == '__main__':
     app.run(port=5002)
