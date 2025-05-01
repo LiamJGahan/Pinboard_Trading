@@ -130,7 +130,7 @@ def update_cards(rows, connection):
             overview = lookup_overview(stock["symbol"])
 
             if price and overview:
-                updated_card = {**price, **overview}
+                updated_card = {**price, **overview, "timestamp": datetime.datetime.now()}
 
                 cursor = connection.cursor()
                 cursor.execute("""UPDATE stocks SET name = %s, price = %s, industry = %s, description = %s, 

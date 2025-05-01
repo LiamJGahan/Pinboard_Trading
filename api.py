@@ -84,6 +84,8 @@ def logout():
 # index
 @app.route("/", methods=["GET", "POST"])
 def index():
+    """Create and display stock cards"""
+
     user_id = session.get("user_id")
     connection = create_connection()
     card_list = []
@@ -141,6 +143,30 @@ def index():
     connection.close()
 
     return render_template("index.html", card_list=card_list)   
+
+@app.route("/trade")
+def trade():
+    """Buy or sell stock"""
+
+    # TODO
+
+    return render_template("trade.html")
+
+@app.route("/analytics")
+def analytics():
+    """Examine stock data"""
+
+    # TODO
+
+    return render_template("analytics.html")
+
+@app.route("/account")
+def account():
+    """Manage Account"""
+
+    # TODO
+
+    return render_template("account.html")
 
 # Remove for deployment
 if __name__ == '__main__':

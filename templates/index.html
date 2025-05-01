@@ -5,25 +5,38 @@
 {% endblock %}
 
 {% block main %}
-    <form method="POST" action="/">
-        <label for="symbol">Symbol:</label>
-        <input type="text" id="symbol" name="symbol" value="{{ symbol }}">
-        <button type="submit">Search</button>
-    </form>
+    <div class="mb-4">
+        <form method="POST" action="/">
+            <label for="symbol">Symbol:</label>
+            <input type="text" id="symbol" name="symbol" value="{{ symbol }}">
+            <button class="btn btn-primary mb-1" type="submit">Pin</button>
+        </form>
+    </div>
 
     <div class="container">
         <div class="row justify-content-center">
             {% for card in card_list %}
-            <div class="col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-                <div class="card text-center mb-4 w-100">
-                    <div class="card-title mt-2 border-bottom">
-                        <h5>{{ card.symbol }}</h5>
+            <div class="col-sm-6 col-md-4 col-lg-3 d-flex">
+                <div class="card text-center mb-4 w-100 shadow">
+    
+                    <div class="card-title mt-2 border-bottom px-3 position-relative" style="height: 40px;">
+                        <h5 class="position-absolute top-50 start-50 translate-middle m-0">
+                            {{ card.symbol }}
+                        </h5>
+                        <div class="position-absolute top-50 end-0 translate-middle-y me-2">
+                            <button class="btn btn-danger btn-sm rounded-circle p-0" style="width: 32px; height: 32px;">
+                                <i class="bi bi-x-lg text-white align-items-center justify-content-center"></i>
+                            </button>
+                        </div>            
                     </div>
+    
                     <div class="card-body">
                         <h6 class="card-subtitle mb-2 text-muted">{{ card.name }}</h6>
                         <p class="card-text">Price: ${{ card.price }}</p>
-                        <button class="btn btn-primary">View Analytics</button>
+                        <button class="btn btn-primary mb-1">Trade</button>
+                        <button class="btn btn-secondary mb-1">Analytics</button>
                     </div>
+
                 </div>
             </div>
             {% endfor %}

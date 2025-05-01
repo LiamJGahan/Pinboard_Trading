@@ -67,3 +67,16 @@ geeksforgeeks.org
 https://www.psycopg.org/docs/
 -Reasearch on psycopg. (25/04/2025)
 -Reasearch on realdict for psycopg2. (30/04/2025)
+
+https://getbootstrap.com/docs/5.3/getting-started/introduction/
+BootStrap
+-Reasearch on position translate. (30/04/2025)
+-Reasearch on shadow. (01/05/2025)
+
+https://icons.getbootstrap.com/
+BootStrap icons
+-Found an icon for my card delete button. (01/05/2025)
+
+https://www.youtube.com/watch?app=desktop&v=UGtB7i9gD4s
+Coding Yaar
+-Learning how to use BootStrapicons in buttons. (01/05/2025)
