@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block nav %}
+    {% if session.get("user_id") %}
     <nav class="border navbar navbar-expand-md" style="background-color: wheat !important;">
         <div class="container d-flex justify-content-center align-items-center" style="min-height: 40px;">
             <form method="POST" action="/" class="d-flex flex-column flex-md-row align-items-center gap-2">
@@ -14,6 +15,7 @@
             </form>
         </div>
     </nav>
+    {% endif %}  
 {% endblock %}
 
 {% block main %}
