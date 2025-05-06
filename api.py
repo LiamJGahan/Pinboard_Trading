@@ -1,7 +1,7 @@
 from helpers import apology, lookup, lookup_overview, update_cards
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
@@ -80,6 +80,68 @@ def logout():
 
     # Redirect user to login form
     return redirect("/")
+
+@app.route("/password", methods=["GET", "POST"])
+#@login_required  TODO
+def password():
+    """Change Password"""
+
+    connection = create_connection()
+    user_id = session.get("user_id")
+
+    if user_id == None:
+        connection.close()
+        return apology("Must log in", 400)
+
+    if request.method == "POST":
+
+        # Ensure username was submitted
+        if not request.form.get("oldpassword"):
+            connection.close()
+            return apology("must enter old password", 400)   
+
+        cursor = connection.cursor()
+        row = cursor.execute(
+            "SELECT * FROM users WHERE id = %s", (user_id,)
+        )
+        row = cursor.fetchone()
+        cursor.close()
+
+        # Ensure password is correct
+        if not row or not check_password_hash(
+            row["hash"], request.form.get("oldpassword")
+        ):
+            connection.close()
+            return apology("user or old password is invalid", 400)
+
+        # Ensure password was submitted
+        elif not request.form.get("newpassword"):
+            connection.close()
+            return apology("must enter new password", 400)
+
+        # Ensure re-entered password was submitted
+        elif not request.form.get("confirmation"):
+            connection.close()
+            return apology("must re-enter new password", 400)
+
+        # Ensure passwords match
+        elif request.form.get("newpassword") != request.form.get("confirmation"):
+            connection.close()
+            return apology("new passwords do not match", 400)
+
+        # Add new user to database
+        cursor2 = connection.cursor()
+        hash = generate_password_hash(request.form.get("newpassword"))
+        cursor2.execute("UPDATE users SET hash = %s WHERE id = %s", (hash, user_id))
+        connection.commit()
+        cursor2.close
+
+        connection.close()
+        return redirect("/")
+
+    else:
+        connection.close()
+        return render_template("account.html")
 
 # index
 @app.route("/", methods=["GET", "POST"])
