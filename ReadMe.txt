@@ -1,8 +1,13 @@
 https://cs50.harvard.edu/x/2025/psets/9/finance/
 CS50 Harvardx
--(finance) helper.py functions used a reference/base for (pinboard) helper.py. (7/4/2025)
+-(finance) Helper.py functions used a reference/base for (pinboard) helper.py. (7/4/2025)
 -Used MySQL table queries from finance for pinboard database (transactions, users). (4/4/2025)
--(finance) login, logout, apology and login_required imported to project with some minor adjustments for postgres. (25/04/2025)
+-(finance) Login, logout, apology and login_required imported to project with some minor adjustments for postgres. (25/04/2025)
+-(finance) Register function imported into project and modified for postgres. (06/05/2025)
+
+https://cs50.harvard.edu/x/2025/psets/9/finance/
+LiamJGahan problem set 
+-(finance) Password API handler imported to project and modified for postgres. (06/05/2025)
 
 https://www.w3schools.com/python
 W3Schools

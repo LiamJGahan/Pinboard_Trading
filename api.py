@@ -81,6 +81,7 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
+# Citation - Harvardx CS50x Finance LiamJGahan
 @app.route("/password", methods=["GET", "POST"])
 #@login_required  TODO
 def password():
@@ -142,6 +143,64 @@ def password():
     else:
         connection.close()
         return render_template("account.html")
+
+# Citation - Harvardx CS50x Finance
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """Register user"""
+
+    connection = create_connection()
+
+    if request.method == "POST":
+
+        # Ensure username was submitted
+        if not request.form.get("username"):
+            connection.close()
+            return apology("must enter new username", 400)
+
+        cursor = connection.cursor()
+        username = request.form.get("username")
+        username_taken = cursor.execute(
+            "SELECT username FROM users WHERE username = %s", (username,)
+        )
+        username_taken = cursor.fetchone()
+        cursor.close()
+
+        # Ensure username not taken
+        if username_taken:
+            connection.close()
+            return apology("Username taken", 400)
+
+        # Ensure password was submitted
+        elif not request.form.get("password"):
+            connection.close()
+            return apology("must enter new password", 400)
+
+        # Ensure re-entered password was submitted
+        elif not request.form.get("confirmation"):
+            connection.close()
+            return apology("must re-enter new password", 400)
+
+        # Ensure passwords match
+        elif request.form.get("password") != request.form.get("confirmation"):
+            connection.close()
+            return apology("passwords do not match", 400)
+
+        # Add new user to database
+        cursor2 = connection.cursor()
+        cursor2.execute(
+            "INSERT INTO users (username, hash) VALUES (%s, %s)", (request.form.get(
+                "username"), generate_password_hash(request.form.get("password")))
+        )
+        connection.commit()
+        cursor2.close()
+
+        connection.close()
+        return redirect("/login")
+
+    else:
+        connection.close()
+        return render_template("register.html")
 
 # index
 @app.route("/", methods=["GET", "POST"])
