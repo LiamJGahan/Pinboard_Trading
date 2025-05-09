@@ -4,6 +4,7 @@ CS50 Harvardx
 -Used MySQL table queries from finance for pinboard database (transactions, users). (4/4/2025)
 -(finance) Login, logout, apology and login_required imported to project with some minor adjustments for postgres. (25/04/2025)
 -(finance) Register function imported into project and modified for postgres. (06/05/2025)
+-(finance) Buy and sell funtions were used as a base in which to create the trade function. (07/05/2025)
 
 https://cs50.harvard.edu/x/2025/psets/9/finance/
 LiamJGahan problem set 
@@ -14,13 +15,14 @@ W3Schools
 -Understanding Try:/Except: (7/4/2025)
 -Understanding .get (7/4/2025)
 -Reasearching how to merge dictionaries. (28/04/2025)
+-Reasearching Python abs() Function. (08/05/2025)
 
 https://chatgpt.com/
 Chat GPT
 -Finding database hosting providers. (Aiven). (4/4/2025)
 -Assistance in understanding postgres. (25/04/2025)
--Goal milestones and productivity assistance. (27/04/2025) continued
--Bugfinding and troubleshooting assistance. (28/04/2025) continued
+-Goal milestones and productivity assistance. (27/04/2025 to project completion) 
+-Bugfinding and troubleshooting assistance. (28/04/2025 to project completion) 
 -Psycopg2 assistance (30/04/2025)
 
 https://www.pythonhelp.org/tutorials/first-key-dictionary-python/
@@ -90,3 +92,11 @@ Coding Yaar
 https://ico.org.uk/for-organisations/advice-for-small-organisations/create-your-own-privacy-notice/
 ico.org.uk
 -Generated a privacy policy. (01/05/2025)
+
+https://stackoverflow.com/questions/33730538/difference-between-decimal-and-numeric-datatypes-in-postgresql#:~:text=For%20PostgreSQL%20the%20answer%20is,part%20of%20the%20SQL%20standard.
+stackoverflow
+-Reasearching why NUMERIC in postgres was creating a Decimal value type. (08/05/2025)
+
+https://www.postgresql.org/docs/current/plpython-data.html
+Postgresql.org
+-Reasearch on how to convert data type to Decimal using decimal import. (08/05/2025)

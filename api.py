@@ -5,6 +5,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
+from decimal import Decimal
 
 # Configure application
 app = Flask(__name__)
@@ -265,13 +266,128 @@ def index():
 
     return render_template("index.html", card_list=card_list)   
 
-@app.route("/trade")
-def trade():
+# Citation - Harvardx CS50x Finance (used as base, heavily modified)
+@app.route("/trade", methods=["GET", "POST"])
+@app.route("/trade/<symbol>", methods=["GET", "POST"])
+def trade(symbol=None):
     """Buy or sell stock"""
 
-    # TODO
+    if not symbol or symbol == None:
+        return apology("symbol not found", 500)
 
-    return render_template("trade.html")
+    symbol = symbol.upper()
+    connection = create_connection()
+
+    # Query database for userID
+    cursor = connection.cursor()
+    user_id = session.get("user_id")
+    cursor.execute(
+        "SELECT * FROM users WHERE id = %s", (user_id,)
+    )
+    user = cursor.fetchone()
+    cursor.close()
+
+    # Check if user is null
+    if not user:
+        connection.close()
+        return apology("user not found, login again", 500)
+        
+
+    # Get price
+    cursor2 = connection.cursor()
+    cursor2.execute("SELECT price FROM stocks WHERE user_id = %s AND symbol = %s", (user_id, symbol))
+    price_row = cursor2.fetchone()
+    cursor2.close()
+
+    # Check price
+    if price_row is None:
+        connection.close()
+        return apology("Price not found", 500)
+
+    price = Decimal(price_row["price"])
+
+    if request.method == "POST":
+
+        shares = request.form.get("shares")
+
+        # Ensure shares was submitted
+        if not shares:
+            connection.close()
+            return apology("must provide shares", 400)
+
+        # Ensure shares are intergers
+        try:
+            int(shares)
+        except:
+            connection.close()
+            return apology("must provide integers for shares", 400)
+
+        # Check user has required funds
+        if ((price * Decimal(shares)) > user["cash"]):
+            connection.close()
+            return apology("not enough funds for purchase", 400)
+
+        # Update db with new cash total
+        cursor3 = connection.cursor()
+        remainder = Decimal()
+
+        if int(request.form.get("shares")) < 0:
+
+            # loop though owned_stocks to get amount of stock held for symbol
+            amount_of_stock = 0
+
+            cursor3.execute(
+            "SELECT symbol, SUM(shares) AS shares, AVG(price) AS price, SUM(transaction_total) AS total FROM transactions WHERE user_id = %s GROUP BY symbol HAVING SUM(shares) > 0", (user_id,)
+            )
+            owned_stocks = cursor3.fetchall()
+
+            for stock in owned_stocks:
+                if stock["symbol"] == symbol:
+                    amount_of_stock += stock["shares"]
+
+            # Check user has required amount of stock to sell
+            if (amount_of_stock < abs(int(shares))):
+                cursor3.close()
+                connection.close()
+                return apology("not enough stock for sale", 400)
+
+            # Subtract stock from db
+            remainder = user["cash"] + (price * abs(Decimal(shares)))
+
+            cursor3.execute(
+                "INSERT INTO transactions (user_id, shares, symbol, price, transaction_total) VALUES (%s, %s, %s, %s, %s)", 
+                (user_id, int(shares), symbol, price, price * abs(Decimal(shares)))
+            )
+
+        elif int(shares) > 0:
+
+            # Add stock to db
+            remainder = user["cash"] - (price * Decimal(shares))
+
+            cursor3.execute(
+                "INSERT INTO transactions (user_id, shares, symbol, price, transaction_total) VALUES (%s, %s, %s, %s, %s)", 
+                (user_id, int(shares), symbol, price, -(price * Decimal(shares)))
+            )
+        
+        else:
+            cursor3.close()
+            connection.close()
+            return apology("Must enter a value above or below zero", 400)
+
+        # Update user cash
+        cursor3.execute(
+            "Update users Set cash = %s Where id = %s", (remainder, user_id)
+        )
+        connection.commit()
+        cursor3.close()
+
+        connection.close()
+        return redirect(f"/trade/{symbol}")
+
+    else:
+
+        connection.close()
+        return render_template("trade.html", symbol=symbol, price=price)
 
 @app.route("/analytics")
 def analytics():
