@@ -267,7 +267,6 @@ def index():
     return render_template("index.html", card_list=card_list)   
 
 # Citation - Harvardx CS50x Finance (used as base, heavily modified)
-@app.route("/trade", methods=["GET", "POST"])
 @app.route("/trade/<symbol>", methods=["GET", "POST"])
 def trade(symbol=None):
     """Buy or sell stock"""
@@ -389,6 +388,61 @@ def trade(symbol=None):
         connection.close()
         return render_template("trade.html", symbol=symbol, price=price)
 
+
+@app.route("/remove_stock/<symbol>", methods=["GET", "POST"])
+#@login_required
+def remove_stock(symbol=None):
+
+    user_id = session["user_id"]
+
+    if not symbol:
+        return apology("Missing symbol", 500)
+
+    connection = create_connection()
+    cursor = connection.cursor()
+
+    # Get total shares
+    amount_of_stock = 0
+
+    cursor.execute(
+    "SELECT symbol, SUM(shares) AS shares, AVG(price) AS price, SUM(transaction_total) AS total FROM transactions WHERE user_id = %s GROUP BY symbol HAVING SUM(shares) > 0", (user_id,)
+    )
+    owned_stocks = cursor.fetchall()
+    price = Decimal()
+
+    for stock in owned_stocks:
+        if stock["symbol"] == symbol:
+            amount_of_stock += stock["shares"]
+            price = Decimal(stock["price"])
+
+    # Sell shares
+    if amount_of_stock > 0:
+
+        cursor.execute(
+            "SELECT * FROM users WHERE id = %s", (user_id,)
+        )
+        user = cursor.fetchone()
+
+        remainder = user["cash"] + (price * abs(Decimal(amount_of_stock)))
+
+        cursor.execute(
+            "INSERT INTO transactions (user_id, shares, symbol, price, transaction_total) VALUES (%s, %s, %s, %s, %s)", 
+            (user_id, int(amount_of_stock), symbol, price, price * abs(amount_of_stock))
+        )
+
+    # Remove Stock
+    cursor.execute(
+        "DELETE FROM stocks WHERE user_id = %s AND symbol = %s",
+        (user_id, symbol.upper())
+    )
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return redirect("/")
+
+
 @app.route("/analytics")
 def analytics():
     """Examine stock data"""
@@ -396,6 +450,7 @@ def analytics():
     # TODO
 
     return render_template("analytics.html")
+
 
 @app.route("/account")
 def account():
@@ -405,11 +460,13 @@ def account():
 
     return render_template("account.html")
 
+
 @app.route("/privacy")
 def privacy():
     """Display Privacy Policy"""
 
     return render_template("privacy.html")
+
 
 # Remove for deployment
 if __name__ == '__main__':

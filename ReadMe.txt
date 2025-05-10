@@ -14,8 +14,9 @@ https://www.w3schools.com/python
 W3Schools
 -Understanding Try:/Except: (7/4/2025)
 -Understanding .get (7/4/2025)
--Reasearching how to merge dictionaries. (28/04/2025)
--Reasearching Python abs() Function. (08/05/2025)
+-Researching how to merge dictionaries. (28/04/2025)
+-Researching Python abs() Function. (08/05/2025)
+-Researching Window confirm(). (10/05/2025)
 
 https://chatgpt.com/
 Chat GPT
