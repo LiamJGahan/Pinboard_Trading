@@ -393,6 +393,10 @@ def trade(symbol=None):
 #@login_required
 def remove_stock(symbol=None):
 
+    if not symbol or symbol == None:
+        return apology("symbol not found", 500)
+
+    symbol = symbol.upper()
     user_id = session["user_id"]
 
     if not symbol:
@@ -408,32 +412,53 @@ def remove_stock(symbol=None):
     "SELECT symbol, SUM(shares) AS shares, AVG(price) AS price, SUM(transaction_total) AS total FROM transactions WHERE user_id = %s GROUP BY symbol HAVING SUM(shares) > 0", (user_id,)
     )
     owned_stocks = cursor.fetchall()
-    price = Decimal()
 
     for stock in owned_stocks:
         if stock["symbol"] == symbol:
             amount_of_stock += stock["shares"]
-            price = Decimal(stock["price"])
 
     # Sell shares
     if amount_of_stock > 0:
 
+        # Get user
         cursor.execute(
             "SELECT * FROM users WHERE id = %s", (user_id,)
         )
         user = cursor.fetchone()
 
+        # Check if user is null
+        if not user:
+            connection.close()
+            return apology("user not found, login again", 500)
+
+        # Get price
+        cursor.execute("SELECT price FROM stocks WHERE user_id = %s AND symbol = %s", (user_id, symbol))
+        price_row = cursor.fetchone()
+
+        # Check price
+        if price_row is None:
+            connection.close()
+            return apology("Price not found", 500)
+
+        price = Decimal(price_row["price"])
+
         remainder = user["cash"] + (price * abs(Decimal(amount_of_stock)))
 
+        # Enter transaction into db
         cursor.execute(
             "INSERT INTO transactions (user_id, shares, symbol, price, transaction_total) VALUES (%s, %s, %s, %s, %s)", 
-            (user_id, int(amount_of_stock), symbol, price, price * abs(amount_of_stock))
+            (user_id, -int(amount_of_stock), symbol, price, -price * abs(amount_of_stock))
+        )
+
+        # Update user cash
+        cursor.execute(
+            "Update users Set cash = %s Where id = %s", (remainder, user_id)
         )
 
     # Remove Stock
     cursor.execute(
         "DELETE FROM stocks WHERE user_id = %s AND symbol = %s",
-        (user_id, symbol.upper())
+        (user_id, symbol)
     )
 
     connection.commit()
