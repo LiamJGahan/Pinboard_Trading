@@ -25,6 +25,7 @@ Chat GPT
 -Goal milestones and productivity assistance. (27/04/2025 to project completion) 
 -Bugfinding and troubleshooting assistance. (28/04/2025 to project completion) 
 -Psycopg2 assistance (30/04/2025)
+-Assistance deploying Clever Cloud application. (11/05/2025)
 
 https://www.pythonhelp.org/tutorials/first-key-dictionary-python/
 Python Help
@@ -37,6 +38,7 @@ CS50 AI chat
 https://www.clever-cloud.com/developers/doc/addons/postgresql/
 Clever Cloud 
 -Documentation for postgres database. (25/04/2025)
+-Documentation for Python application. (11/05/2025)
 
 https://gist.github.com/bmaupin/0ce79806467804fdbbf8761970511b8c
 bmaupin
