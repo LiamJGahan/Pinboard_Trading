@@ -209,60 +209,59 @@ def index():
     """Create and display stock cards"""
 
     user_id = session.get("user_id")
-    connection = create_connection()
     card_list = []
 
-    if request.method == "POST":
+    if user_id != None:
+        
+        connection = create_connection()
 
-        if user_id == None:
-            connection.close()
-            return apology("Must log in", 400)
+        if request.method == "POST":
 
-        symbol = request.form["symbol"].upper()
+            symbol = request.form["symbol"].upper()
 
-        if not symbol:
-            connection.close()
-            return apology("Must enter symbol", 400)
+            if not symbol:
+                connection.close()
+                return apology("Must enter symbol", 400)
 
-        price = lookup(symbol)
-        overview = lookup_overview(symbol)
+            price = lookup(symbol)
+            overview = lookup_overview(symbol)
 
-        if price and overview:
-            card = {**price, **overview}
+            if price and overview:
+                card = {**price, **overview}
 
-            cursor = connection.cursor()
+                cursor = connection.cursor()
 
-            # Check if stock exists, if not, add a new one
-            cursor.execute("SELECT * FROM stocks WHERE user_id = %s AND symbol = %s", (user_id, symbol))
-            stock = cursor.fetchone()
+                # Check if stock exists, if not, add a new one
+                cursor.execute("SELECT * FROM stocks WHERE user_id = %s AND symbol = %s", (user_id, symbol))
+                stock = cursor.fetchone()
 
-            if not stock:
-                cursor.execute("""INSERT INTO stocks (user_id, symbol, name, price, industry, description, market_cap)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)""", (user_id, card["symbol"], card["name"], card["price"], card["industry"], card["description"], card["market_cap"]))
-                connection.commit()
+                if not stock:
+                    cursor.execute("""INSERT INTO stocks (user_id, symbol, name, price, industry, description, market_cap)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)""", (user_id, card["symbol"], card["name"], card["price"], card["industry"], card["description"], card["market_cap"]))
+                    connection.commit()
 
-            cursor.close()
-        else:
-            connection.close()
-            return apology("Alphavantage API limit reached", 503)        
+                cursor.close()
+            else:
+                connection.close()
+                return apology("Alphavantage API limit reached", 503)        
 
-    # Get stocks
-    cursor2 = connection.cursor()
-    cursor2.execute("SELECT symbol, name, price, timestamp FROM stocks WHERE user_id = %s", (user_id,))
-    rows = cursor2.fetchall()
-    cursor2.close()
+        # Get stocks
+        cursor2 = connection.cursor()
+        cursor2.execute("SELECT symbol, name, price, timestamp FROM stocks WHERE user_id = %s", (user_id,))
+        rows = cursor2.fetchall()
+        cursor2.close()
 
-    # Update the index cards if new day
-    update_cards(rows, connection)
+        # Update the index cards if new day
+        update_cards(rows, connection)
 
-    for row in rows:
-        card_list.append({
-            "symbol": row["symbol"],
-            "name": row["name"],
-            "price": row["price"],
-        })
+        for row in rows:
+            card_list.append({
+                "symbol": row["symbol"],
+                "name": row["name"],
+                "price": row["price"],
+            })
 
-    connection.close()
+        connection.close()
 
     return render_template("index.html", card_list=card_list)   
 
@@ -493,6 +492,6 @@ def privacy():
     return render_template("privacy.html")
 
 
-# # Remove for deployment
-# if __name__ == '__main__':
-#     app.run(port=5002)
+# Remove for deployment
+if __name__ == '__main__':
+    app.run(port=5002)

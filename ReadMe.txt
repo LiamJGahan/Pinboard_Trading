@@ -35,7 +35,7 @@ https://cs50.ai/chat
 CS50 AI chat 
 -help with understanding dictionaries in Python. (8/4/2025)
 
-https://www.clever-cloud.com/developers/doc/addons/postgresql/
+https://www.clever-cloud.com/developers/doc
 Clever Cloud 
 -Documentation for postgres database. (25/04/2025)
 -Documentation for Python application. (11/05/2025)
@@ -103,3 +103,6 @@ stackoverflow
 https://www.postgresql.org/docs/current/plpython-data.html
 Postgresql.org
 -Reasearch on how to convert data type to Decimal using decimal import. (08/05/2025)
+
+https://getbootstrap.com/docs/4.0/content/typography/
+-Reasearched how to style a welcome message. (12/05/2025)
