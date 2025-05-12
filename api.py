@@ -315,10 +315,12 @@ def trade(symbol=None):
         return apology("user not found, login again", 500)
         
 
-    # Get price
+    # Get price and user
     cursor2 = connection.cursor()
     cursor2.execute("SELECT price FROM stocks WHERE user_id = %s AND symbol = %s", (user_id, symbol))
     price_row = cursor2.fetchone()
+    transactions = cursor2.execute("SELECT symbol, shares, transaction_total FROM transactions WHERE user_id = %s", (user_id,))
+    transactions = cursor2.fetchall()
     cursor2.close()
 
     # Check price
@@ -408,8 +410,18 @@ def trade(symbol=None):
 
     else:
 
+        amount = 0
+
+        # Count user stock
+        for transaction in transactions:
+            if transaction["symbol"] == symbol:
+                amount += transaction["shares"]
+
+        # Sum amount of stock with the latest closing price
+        total = price * amount
+
         connection.close()
-        return render_template("trade.html", symbol=symbol, price=usd(price))
+        return render_template("trade.html", symbol=symbol, price=usd(price), amount=amount, total=usd(total))
 
 
 @app.route("/remove_stock/<symbol>", methods=["GET", "POST"])
@@ -516,6 +528,6 @@ def privacy():
     return render_template("privacy.html")
 
 
-# # Remove for deployment
-# if __name__ == '__main__':
-#     app.run(port=5002)
+# Remove for deployment
+if __name__ == '__main__':
+    app.run(port=5002)
