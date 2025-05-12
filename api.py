@@ -1,4 +1,4 @@
-from helpers import apology, lookup, lookup_overview, update_cards
+from helpers import apology, lookup, lookup_overview, update_cards, usd
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -210,7 +210,9 @@ def index():
 
     user_id = session.get("user_id")
     card_list = []
+    user_prompt = ""
 
+    # Check if user is signed in
     if user_id != None:
         
         connection = create_connection()
@@ -219,6 +221,7 @@ def index():
 
             symbol = request.form["symbol"].upper()
 
+            # Ensure symbol has been entered
             if not symbol:
                 connection.close()
                 return apology("Must enter symbol", 400)
@@ -226,6 +229,7 @@ def index():
             price = lookup(symbol)
             overview = lookup_overview(symbol)
 
+            # Combine the lookups into one
             if price and overview:
                 card = {**price, **overview}
 
@@ -245,25 +249,45 @@ def index():
                 connection.close()
                 return apology("Alphavantage API limit reached", 503)        
 
-        # Get stocks
+        # Get stocks and transactions
         cursor2 = connection.cursor()
         cursor2.execute("SELECT symbol, name, price, timestamp FROM stocks WHERE user_id = %s", (user_id,))
-        rows = cursor2.fetchall()
+        cards = cursor2.fetchall()
+        transactions = cursor2.execute("SELECT symbol, shares, transaction_total FROM transactions WHERE user_id = %s", (user_id,))
+        transactions = cursor2.fetchall()
         cursor2.close()
 
         # Update the index cards if new day
-        update_cards(rows, connection)
+        update_cards(cards, connection)
 
-        for row in rows:
-            card_list.append({
-                "symbol": row["symbol"],
-                "name": row["name"],
-                "price": row["price"],
-            })
+        if cards:
+            for card in cards:
+
+                amount = 0
+                total = 0
+
+                # Count user stock
+                for transaction in transactions:
+                    if transaction["symbol"] == card["symbol"]:
+                        amount += transaction["shares"]
+
+                # Sum amount of stock with the latest closing price
+                total = card["price"] * amount
+
+                # Create card list
+                card_list.append({
+                    "symbol": card["symbol"],
+                    "name": card["name"],
+                    "price": usd(card["price"]),
+                    "amount": amount,
+                    "total": usd(total)
+                })
+        else:
+            user_prompt = "Your Pinboard is empty, use the search bar above to pin a new card."
 
         connection.close()
 
-    return render_template("index.html", card_list=card_list)   
+    return render_template("index.html", card_list=card_list, user_prompt=user_prompt)   
 
 # Citation - Harvardx CS50x Finance (used as base, heavily modified)
 @app.route("/trade/<symbol>", methods=["GET", "POST"])
@@ -385,7 +409,7 @@ def trade(symbol=None):
     else:
 
         connection.close()
-        return render_template("trade.html", symbol=symbol, price=price)
+        return render_template("trade.html", symbol=symbol, price=usd(price))
 
 
 @app.route("/remove_stock/<symbol>", methods=["GET", "POST"])

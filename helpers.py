@@ -148,3 +148,8 @@ def update_cards(rows, connection):
                 connection.commit()
 
                 cursor.close()
+
+def usd(value):
+    """Format value as USD."""
+    
+    return f"${value:,.2f}"

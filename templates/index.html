@@ -24,7 +24,7 @@
         <div class="row justify-content-center">
             {% for card in card_list %}
             <div class="col-sm-6 col-md-4 col-lg-3 d-flex">
-                <div class="card text-center mb-4 w-100 shadow border-4 border-primary">
+                <div class="card text-center mb-4 w-100 shadow border-secondary">
     
                     <div class="card-title mt-2 border-bottom px-3 position-relative" style="height: 40px;">
                         <h5 class="position-absolute top-50 start-50 translate-middle m-0">
@@ -40,17 +40,21 @@
     
                     <div class="card-body">
                         <h6 class="card-subtitle mb-2 text-muted">{{ card.name }}</h6>
-                        <p class="card-text">Daily Price: ${{ card.price }}</p>
-                        <p class="card-text m-0">Amount: $0</p>
-                        <p class="card-text">Total Value: $0</p>
+                        <p class="card-text">Closing Price: {{ card.price }}</p>
+                        <p class="card-text m-0">Amount: {{ card.amount }}</p>
+                        <p class="card-text">Total Value: {{ card.total }}</p>
                         <a href="/trade/{{ card.symbol }}" class="btn btn-primary mb-1">Trade</a>
                         <a href="/analytics" class="btn btn-secondary mb-1">Analytics</a>
                     </div>
-
                 </div>
             </div>
             {% endfor %}
         </div>
+            {% if not card_list %}
+            <div class="text-center mt-5">
+                <h4>{{ user_prompt }}</h4>
+            </div>
+            {% endif %}
         {% else %}
         <div class="text-center mt-5">
             <h1 class="display-3 mb-5">Welcome to Pinboard, stocks made easy.</h1>
