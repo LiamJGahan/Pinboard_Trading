@@ -240,8 +240,11 @@ def index():
                 stock = cursor.fetchone()
 
                 if not stock:
-                    cursor.execute("""INSERT INTO stocks (user_id, symbol, name, price, industry, description, market_cap)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s)""", (user_id, card["symbol"], card["name"], card["price"], card["industry"], card["description"], card["market_cap"]))
+                    cursor.execute("""INSERT INTO stocks (user_id, symbol, name, price, industry, description, market_cap, analyst_target, 
+                    analyst_strong_buy, analyst_buy, analyst_hold, analyst_sell, analyst_strong_sell)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (user_id, card["symbol"], card["name"], card["price"], card["industry"], 
+                    card["description"], card["market_cap"], card["analyst_target"], card["analyst_strong_buy"], card["analyst_buy"], card["analyst_hold"],
+                    card["analyst_sell"], card["analyst_strong_sell"]))
                     connection.commit()
 
                 cursor.close()
@@ -503,13 +506,36 @@ def remove_stock(symbol=None):
     return redirect("/")
 
 
-@app.route("/analytics")
-def analytics():
+@app.route("/analytics/<symbol>", methods=["GET", "POST"])
+def analytics(symbol=None):
     """Examine stock data"""
 
-    # TODO
+    if not symbol or symbol == None:
+        return apology("symbol not found", 500)
 
-    return render_template("analytics.html")
+    user_id = session["user_id"]
+
+    connection = create_connection()
+
+    # Get stock
+    cursor = connection.cursor()
+    cursor.execute("""SELECT name, price, market_cap, analyst_target, analyst_strong_buy, analyst_buy, analyst_hold, 
+                    analyst_sell, analyst_strong_sell, timestamp FROM stocks WHERE user_id = %s AND symbol = %s""", (user_id, symbol))
+    stock = cursor.fetchone()
+
+    # Check stock
+
+    # # Get transactions
+    # transactions = cursor.execute("SELECT shares, transaction_total FROM transactions WHERE user_id = %s AND symbol = %s", (user_id, symbol))
+    # transactions = cursor.fetchall()
+    # cursor.close()
+
+    # Get transactions
+
+    connection.close()
+
+    ratings = [stock["analyst_strong_buy"], stock["analyst_buy"], stock["analyst_hold"], stock["analyst_sell"], stock["analyst_strong_sell"]]
+    return render_template("analytics.html", ratings=ratings)
 
 
 @app.route("/account")

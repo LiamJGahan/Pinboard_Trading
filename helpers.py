@@ -90,20 +90,25 @@ def lookup_overview(symbol):
         company_name = company.get("Name", "N/A")
         industry = company.get("Industry", "N/A")
         description = company.get("Description", "No description available.")
-        market_cap = company.get("MarketCapitalization", "N/A")
-        # might add these:
-        #"AnalystTargetPrice",
-        #"AnalystRatingStrongBuy",
-        #"AnalystRatingBuy",
-        #"AnalystRatingHold",
-        #"AnalystRatingSell",
-        #"AnalystRatingStrongSell",
+        market_cap = company.get("MarketCapitalization", "0")
+        analyst_target = company.get("AnalystTargetPrice", "0")
+        analyst_strong_buy = company.get("AnalystRatingStrongBuy", "0")
+        analyst_buy = company.get("AnalystRatingBuy", "0")
+        analyst_hold = company.get("AnalystRatingHold", "0")
+        analyst_sell = company.get("AnalystRatingHold", "0")
+        analyst_strong_sell = company.get("AnalystRatingHold", "0")
         return {
             "name": company_name,
             "industry": industry,
             "description": description,
             "market_cap": market_cap,
-            "symbol": symbol.upper()
+            "symbol": symbol.upper(),
+            "analyst_target": analyst_target,
+            "analyst_strong_buy" : analyst_strong_buy,
+            "analyst_buy": analyst_buy,
+            "analyst_hold": analyst_hold,
+            "analyst_sell": analyst_sell,
+            "analyst_strong_sell": analyst_strong_sell,
         } 
     except requests.RequestException as e:
         print(f"Request error: {e}")
@@ -134,7 +139,8 @@ def update_cards(rows, connection):
 
                 cursor = connection.cursor()
                 cursor.execute("""UPDATE stocks SET name = %s, price = %s, industry = %s, description = %s, 
-                               market_cap = %s, timestamp = %s WHERE user_id = %s AND symbol = %s""", 
+                               market_cap = %s, timestamp = %s, analyst_target = %s, analyst_strong_buy = %s, analyst_buy = %s
+                               , analyst_hold = %s ,analyst_sell = %s, analyst_strong_sell = %s WHERE user_id = %s AND symbol = %s""", 
                 (
                     updated_card["name"],
                     updated_card["price"],
@@ -142,6 +148,12 @@ def update_cards(rows, connection):
                     updated_card["description"],
                     updated_card["market_cap"],
                     updated_card["timestamp"],
+                    updated_card["analyst_target"],
+                    updated_card["analyst_strong_buy"],
+                    updated_card["analyst_buy"],
+                    updated_card["analyst_hold"],
+                    updated_card["analyst_sell"],
+                    updated_card["analyst_strong_sell"],
                     user_id,
                     stock["symbol"]
                 ))
@@ -151,5 +163,5 @@ def update_cards(rows, connection):
 
 def usd(value):
     """Format value as USD."""
-    
+
     return f"${value:,.2f}"

@@ -1,9 +1,44 @@
 {% extends "layout.html" %}
 
+
 {% block title %}
     Analytics
 {% endblock %}
 
 {% block main %}
+<div class="container">
+    <div class="card container mt-5">
+        <h3 class="text-center">Analytic Ratings</h3>
+        <canvas id="analystChart" width="200" height="200"></canvas>
+    </div>
+    <div class="card container mt-5">
 
+    </div>
+    <div class="card container mt-5">
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('analystChart');
+        const analystChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Strong Buy', 'Buy', 'Hold', 'Sell', 'Strong Sell'],
+                datasets: [{
+                    label: 'Analytic Ratings',
+                    data: {{ ratings | tojson}},
+                    backgroundColor: [
+                        'rgba(40, 167, 69, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(153, 102, 255, 0.7)',
+                        'rgba(255, 99, 132, 0.7)'
+                    ],
+                    hoverOffset: 3
+                }]
+            },
+        });
+    </script>
+</div>
 {% endblock %}
