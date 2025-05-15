@@ -554,6 +554,6 @@ def privacy():
     return render_template("privacy.html")
 
 
-# Remove for deployment
-if __name__ == '__main__':
-    app.run(port=5002)
+# # Remove for deployment
+# if __name__ == '__main__':
+#     app.run(port=5002)
