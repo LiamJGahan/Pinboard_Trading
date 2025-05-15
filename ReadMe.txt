@@ -106,3 +106,7 @@ Postgresql.org
 
 https://getbootstrap.com/docs/4.0/content/typography/
 -Reasearched how to style a welcome message. (12/05/2025)
+
+https://www.chartjs.org/docs/latest/
+Chartjs
+-Reasearch on doughnut style pie chart. (14/05/2025)
