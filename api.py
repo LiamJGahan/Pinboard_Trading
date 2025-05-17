@@ -510,32 +510,55 @@ def remove_stock(symbol=None):
 def analytics(symbol=None):
     """Examine stock data"""
 
+    # Check symbol 
     if not symbol or symbol == None:
         return apology("symbol not found", 500)
 
     user_id = session["user_id"]
 
-    connection = create_connection()
+    # Check if user_id is null
+    if not user_id:
+        return apology("user_id not found, login again", 500)
 
-    # Get stock
+
+    connection = create_connection()
     cursor = connection.cursor()
-    cursor.execute("""SELECT name, price, market_cap, analyst_target, analyst_strong_buy, analyst_buy, analyst_hold, 
+
+    # Get user
+    cursor.execute(
+        "SELECT * FROM users WHERE id = %s", (user_id,)
+    )
+    user = cursor.fetchone()
+
+    # Check if user is null
+    if not user:
+        connection.close()
+        return apology("user not found, login again", 500)   
+    
+    # Get stock
+    cursor.execute("""SELECT name, price, description, market_cap, analyst_target, analyst_strong_buy, analyst_buy, analyst_hold, 
                     analyst_sell, analyst_strong_sell, timestamp FROM stocks WHERE user_id = %s AND symbol = %s""", (user_id, symbol))
     stock = cursor.fetchone()
 
-    # Check stock
-
-    # # Get transactions
-    # transactions = cursor.execute("SELECT shares, transaction_total FROM transactions WHERE user_id = %s AND symbol = %s", (user_id, symbol))
-    # transactions = cursor.fetchall()
-    # cursor.close()
+    # Check if stock is null
+    if not stock:
+        connection.close()
+        return apology("stock not found", 500)   
 
     # Get transactions
+    transactions = cursor.execute("SELECT shares, transaction_total, transaction_date FROM transactions WHERE user_id = %s AND symbol = %s", (user_id, symbol))
+    transactions = cursor.fetchall()
+    cursor.close()
+
+    # Check transactions
+    if not transactions:
+        connection.close()
+        return apology("transactions not found", 500)   
 
     connection.close()
 
     ratings = [stock["analyst_strong_buy"], stock["analyst_buy"], stock["analyst_hold"], stock["analyst_sell"], stock["analyst_strong_sell"]]
-    return render_template("analytics.html", ratings=ratings)
+    return render_template("analytics.html", ratings=ratings, stock=stock, cash=usd(user["cash"]), transactions=transactions)
 
 
 @app.route("/account")
@@ -553,7 +576,8 @@ def privacy():
 
     return render_template("privacy.html")
 
+app.jinja_env.filters["usd"] = usd
 
-# # Remove for deployment
-# if __name__ == '__main__':
-#     app.run(port=5002)
+# Remove for deployment
+if __name__ == '__main__':
+    app.run(port=5002)

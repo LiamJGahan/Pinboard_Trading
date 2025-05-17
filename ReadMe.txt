@@ -17,6 +17,7 @@ W3Schools
 -Researching how to merge dictionaries. (28/04/2025)
 -Researching Python abs() Function. (08/05/2025)
 -Researching Window confirm(). (10/05/2025)
+-Research on overflow: Auto. (17/05/2025)
 
 https://chatgpt.com/
 Chat GPT
@@ -50,7 +51,8 @@ LiamJGahan
 
 https://ttl255.com/jinja2-tutorial-part-2-loops-and-conditionals/
 ttl255.com
--Reasearch on jinja2. (28/04/2025)
+-Research on jinja2. (28/04/2025)
+-Research on template filters. (14/05/2025)
 
 https://www.favicon.cc/
 favicon.cc
@@ -104,9 +106,14 @@ https://www.postgresql.org/docs/current/plpython-data.html
 Postgresql.org
 -Reasearch on how to convert data type to Decimal using decimal import. (08/05/2025)
 
-https://getbootstrap.com/docs/4.0/content/typography/
+https://getbootstrap.com/docs/4.0
 -Reasearched how to style a welcome message. (12/05/2025)
+-Reasearch on list groups. (17/05/2025)
+-Research on flex column. (17/05/2025)
 
 https://www.chartjs.org/docs/latest/
 Chartjs
 -Reasearch on doughnut style pie chart. (14/05/2025)
+
+https://docs.rewst.help/documentation/jinja/list-of-jinja-filters
+-Reseach on tojson. (14/05/2025)
