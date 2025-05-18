@@ -18,6 +18,7 @@ W3Schools
 -Researching Python abs() Function. (08/05/2025)
 -Researching Window confirm(). (10/05/2025)
 -Research on overflow: Auto. (17/05/2025)
+-Researching how to place text over images in BootStrap. (18/05/2025)
 
 https://chatgpt.com/
 Chat GPT
@@ -30,7 +31,7 @@ Chat GPT
 
 https://www.pythonhelp.org/tutorials/first-key-dictionary-python/
 Python Help
--Reasearch how to get the first item in a python dict "first_key = next(iter(my_dict))". (7/4/2025)
+-Research how to get the first item in a python dict "first_key = next(iter(my_dict))". (7/4/2025)
 
 https://cs50.ai/chat
 CS50 AI chat 
@@ -47,7 +48,7 @@ bmaupin
 
 https://github.com/SJK9476?tab=repositories
 LiamJGahan
--Reasearching various code snippets with previous work I have done. (25/04/2025)
+-Researching various code snippets with previous work I have done. (25/04/2025)
 
 https://ttl255.com/jinja2-tutorial-part-2-loops-and-conditionals/
 ttl255.com
@@ -61,11 +62,11 @@ favicon.cc
 https://www.alphavantage.co
 Alphavantage
 -Linked 2 APIs to my project. (7/4/2025)
--Reasearched the key limit of the APIs I am using. (28/04/2025)
+-Researched the key limit of the APIs I am using. (28/04/2025)
 
 https://dribbble.com/tags/card-ui
 dribbble.com
--Reasearch on card design. (29/04/2025)
+-Research on card design. (29/04/2025)
 
 https://dbeaver.io/
 DBeaver
@@ -74,17 +75,17 @@ DBeaver
 
 https://www.geeksforgeeks.org/get-current-timestamp-using-python/
 geeksforgeeks.org
--Reasearching how to get the date/datetime using python. (30/04/2025)
+-Researching how to get the date/datetime using python. (30/04/2025)
 
 https://www.psycopg.org/docs/
--Reasearch on psycopg. (25/04/2025)
--Reasearch on realdict for psycopg2. (30/04/2025)
+-Research on psycopg. (25/04/2025)
+-Research on realdict for psycopg2. (30/04/2025)
 
 https://getbootstrap.com/docs/5.3/getting-started/introduction/
 BootStrap
--Reasearch on position translate. (30/04/2025)
--Reasearch on d-flex. (30/04/2025)
--Reasearch on shadow. (01/05/2025)
+-Research on position translate. (30/04/2025)
+-Research on d-flex. (30/04/2025)
+-Research on shadow. (01/05/2025)
 
 https://icons.getbootstrap.com/
 BootStrap icons
@@ -100,20 +101,25 @@ ico.org.uk
 
 https://stackoverflow.com/questions/33730538/difference-between-decimal-and-numeric-datatypes-in-postgresql#:~:text=For%20PostgreSQL%20the%20answer%20is,part%20of%20the%20SQL%20standard.
 stackoverflow
--Reasearching why NUMERIC in postgres was creating a Decimal value type. (08/05/2025)
+-Researching why NUMERIC in postgres was creating a Decimal value type. (08/05/2025)
 
 https://www.postgresql.org/docs/current/plpython-data.html
 Postgresql.org
--Reasearch on how to convert data type to Decimal using decimal import. (08/05/2025)
+-Research on how to convert data type to Decimal using decimal import. (08/05/2025)
 
 https://getbootstrap.com/docs/4.0
--Reasearched how to style a welcome message. (12/05/2025)
--Reasearch on list groups. (17/05/2025)
+-Researched how to style a welcome message. (12/05/2025)
+-Research on list groups. (17/05/2025)
 -Research on flex column. (17/05/2025)
 
 https://www.chartjs.org/docs/latest/
 Chartjs
--Reasearch on doughnut style pie chart. (14/05/2025)
+-Research on doughnut style pie chart. (14/05/2025)
+-Researched responsive chart option. (18/05/2025)
 
 https://docs.rewst.help/documentation/jinja/list-of-jinja-filters
 -Reseach on tojson. (14/05/2025)
+
+https://www.pexels.com
+Pexels
+-Photo by Alesia  Kozik: https://www.pexels.com/photo/graph-of-the-movement-of-the-value-of-bitcoin-6770775/ (17/05/2025)
