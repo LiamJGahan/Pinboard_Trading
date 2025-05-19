@@ -508,30 +508,31 @@ def account():
 def username():
     """Change Username"""
 
+    user_id = session.get("user_id")
+
+    # Check user_id not null
+    if user_id == None:
+        connection.close()
+        return apology("Must log in again", 500)
+
     if request.method == "POST":
 
         connection = create_connection()
-        user_id = session.get("user_id")
-
-        # Check user_id not null
-        if user_id == None:
-            connection.close()
-            return apology("Must log in again", 500)
-
-        # Check old username not null
-        if not request.form.get("oldusername"):
-            connection.close()
-            return apology("must enter old username", 400)  
 
         # Check new username not null
         if not request.form.get("newusername"):
             connection.close()
             return apology("must enter new username", 400)
 
-        # Check username match
+        # Check new username match
         if request.form.get("newusername") != request.form.get("confirmation"):
             connection.close()
             return apology("new username does not match", 400)
+        
+        # Check new password not null
+        if not request.form.get("password"):
+            connection.close()
+            return apology("must enter password", 400)
 
         # Get user
         cursor = connection.cursor()
@@ -540,11 +541,22 @@ def username():
         )
         user = cursor.fetchone()       
 
-        # Check username exists in db
-        if not user:
+        # Check password is correct and user exists
+        if not user or not check_password_hash(
+            user["hash"], request.form.get("password")
+        ):
             cursor.close()
             connection.close()
-            return apology("user not found, login again", 500) 
+            return apology("user or password is invalid", 400)
+        
+        # Check if username already exists
+        cursor.execute("SELECT * FROM users WHERE username = %s", (request.form.get("newusername"),))
+        existing = cursor.fetchone()
+
+        if existing:
+            cursor.close()
+            connection.close()
+            return apology("Username already exists", 400)
 
         # Update username
         cursor = connection.cursor()
@@ -560,67 +572,63 @@ def username():
 
         return render_template("username.html")
 
-# Citation - Harvardx CS50x Finance LiamJGahan
+# Citation - Harvardx CS50x Finance LiamJGahan (modified)
 @app.route("/password", methods=["GET", "POST"])
 #@login_required  TODO
 def password():
     """Change Password"""
 
-    connection = create_connection()
     user_id = session.get("user_id")
 
     if user_id == None:
-        connection.close()
         return apology("Must log in", 400)
 
     if request.method == "POST":
 
-        # Ensure username was submitted
+        connection = create_connection()
+
+        # Check old password not null
         if not request.form.get("oldpassword"):
             connection.close()
-            return apology("must enter old password", 400)   
+            return apology("must enter old password", 400)  
 
-        cursor = connection.cursor()
-        row = cursor.execute(
-            "SELECT * FROM users WHERE id = %s", (user_id,)
-        )
-        row = cursor.fetchone()
-        cursor.close()
-
-        # Ensure password is correct
-        if not row or not check_password_hash(
-            row["hash"], request.form.get("oldpassword")
-        ):
-            connection.close()
-            return apology("user or old password is invalid", 400)
-
-        # Ensure password was submitted
-        elif not request.form.get("newpassword"):
+        # Check new password not null
+        if not request.form.get("newpassword"):
             connection.close()
             return apology("must enter new password", 400)
-
-        # Ensure re-entered password was submitted
-        elif not request.form.get("confirmation"):
-            connection.close()
-            return apology("must re-enter new password", 400)
-
-        # Ensure passwords match
-        elif request.form.get("newpassword") != request.form.get("confirmation"):
+        
+        # Check new passwords match
+        if request.form.get("newpassword") != request.form.get("confirmation"):
             connection.close()
             return apology("new passwords do not match", 400)
 
-        # Add new user to database
-        cursor2 = connection.cursor()
-        hash = generate_password_hash(request.form.get("newpassword"))
-        cursor2.execute("UPDATE users SET hash = %s WHERE id = %s", (hash, user_id))
-        connection.commit()
-        cursor2.close
+        # Get user
+        cursor = connection.cursor()
+        user = cursor.execute(
+            "SELECT * FROM users WHERE id = %s", (user_id,)
+        )
+        user = cursor.fetchone()
 
+        # Check password is correct and user exists
+        if not user or not check_password_hash(
+            user["hash"], request.form.get("oldpassword")
+        ):
+            cursor.close()
+            connection.close()
+            return apology("user or old password is invalid", 400)
+
+        # Update password
+        hash = generate_password_hash(request.form.get("newpassword"))
+        cursor.execute("UPDATE users SET hash = %s WHERE id = %s", (hash, user_id))
+        connection.commit()
+
+        cursor.close
         connection.close()
+
         return redirect("/account")
 
     else:
-        connection.close()
+
         return render_template("password.html")
 
 @app.route("/privacy")
