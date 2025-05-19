@@ -82,69 +82,6 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
-# Citation - Harvardx CS50x Finance LiamJGahan
-@app.route("/password", methods=["GET", "POST"])
-#@login_required  TODO
-def password():
-    """Change Password"""
-
-    connection = create_connection()
-    user_id = session.get("user_id")
-
-    if user_id == None:
-        connection.close()
-        return apology("Must log in", 400)
-
-    if request.method == "POST":
-
-        # Ensure username was submitted
-        if not request.form.get("oldpassword"):
-            connection.close()
-            return apology("must enter old password", 400)   
-
-        cursor = connection.cursor()
-        row = cursor.execute(
-            "SELECT * FROM users WHERE id = %s", (user_id,)
-        )
-        row = cursor.fetchone()
-        cursor.close()
-
-        # Ensure password is correct
-        if not row or not check_password_hash(
-            row["hash"], request.form.get("oldpassword")
-        ):
-            connection.close()
-            return apology("user or old password is invalid", 400)
-
-        # Ensure password was submitted
-        elif not request.form.get("newpassword"):
-            connection.close()
-            return apology("must enter new password", 400)
-
-        # Ensure re-entered password was submitted
-        elif not request.form.get("confirmation"):
-            connection.close()
-            return apology("must re-enter new password", 400)
-
-        # Ensure passwords match
-        elif request.form.get("newpassword") != request.form.get("confirmation"):
-            connection.close()
-            return apology("new passwords do not match", 400)
-
-        # Add new user to database
-        cursor2 = connection.cursor()
-        hash = generate_password_hash(request.form.get("newpassword"))
-        cursor2.execute("UPDATE users SET hash = %s WHERE id = %s", (hash, user_id))
-        connection.commit()
-        cursor2.close
-
-        connection.close()
-        return redirect("/")
-
-    else:
-        connection.close()
-        return render_template("account.html")
-
 # Citation - Harvardx CS50x Finance
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -565,16 +502,138 @@ def analytics(symbol=None):
 def account():
     """Manage Account"""
 
-    # TODO
-
     return render_template("account.html")
 
+@app.route("/username", methods=["GET", "POST"])
+def username():
+    """Change Username"""
+
+    if request.method == "POST":
+
+        connection = create_connection()
+        user_id = session.get("user_id")
+
+        # Check user_id not null
+        if user_id == None:
+            connection.close()
+            return apology("Must log in again", 500)
+
+        # Check old username not null
+        if not request.form.get("oldusername"):
+            connection.close()
+            return apology("must enter old username", 400)  
+
+        # Check new username not null
+        if not request.form.get("newusername"):
+            connection.close()
+            return apology("must enter new username", 400)
+
+        # Check username match
+        if request.form.get("newusername") != request.form.get("confirmation"):
+            connection.close()
+            return apology("new username does not match", 400)
+
+        # Get user
+        cursor = connection.cursor()
+        user = cursor.execute(
+            "SELECT * FROM users WHERE id = %s", (user_id,)
+        )
+        user = cursor.fetchone()       
+
+        # Check username exists in db
+        if not user:
+            cursor.close()
+            connection.close()
+            return apology("user not found, login again", 500) 
+
+        # Update username
+        cursor = connection.cursor()
+        cursor.execute("UPDATE users SET username = %s WHERE id = %s", (request.form.get("newusername"), user_id))
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+        return redirect("/account")
+
+    else:
+
+        return render_template("username.html")
+
+# Citation - Harvardx CS50x Finance LiamJGahan
+@app.route("/password", methods=["GET", "POST"])
+#@login_required  TODO
+def password():
+    """Change Password"""
+
+    connection = create_connection()
+    user_id = session.get("user_id")
+
+    if user_id == None:
+        connection.close()
+        return apology("Must log in", 400)
+
+    if request.method == "POST":
+
+        # Ensure username was submitted
+        if not request.form.get("oldpassword"):
+            connection.close()
+            return apology("must enter old password", 400)   
+
+        cursor = connection.cursor()
+        row = cursor.execute(
+            "SELECT * FROM users WHERE id = %s", (user_id,)
+        )
+        row = cursor.fetchone()
+        cursor.close()
+
+        # Ensure password is correct
+        if not row or not check_password_hash(
+            row["hash"], request.form.get("oldpassword")
+        ):
+            connection.close()
+            return apology("user or old password is invalid", 400)
+
+        # Ensure password was submitted
+        elif not request.form.get("newpassword"):
+            connection.close()
+            return apology("must enter new password", 400)
+
+        # Ensure re-entered password was submitted
+        elif not request.form.get("confirmation"):
+            connection.close()
+            return apology("must re-enter new password", 400)
+
+        # Ensure passwords match
+        elif request.form.get("newpassword") != request.form.get("confirmation"):
+            connection.close()
+            return apology("new passwords do not match", 400)
+
+        # Add new user to database
+        cursor2 = connection.cursor()
+        hash = generate_password_hash(request.form.get("newpassword"))
+        cursor2.execute("UPDATE users SET hash = %s WHERE id = %s", (hash, user_id))
+        connection.commit()
+        cursor2.close
+
+        connection.close()
+        return redirect("/account")
+
+    else:
+        connection.close()
+        return render_template("password.html")
 
 @app.route("/privacy")
 def privacy():
     """Display Privacy Policy"""
 
     return render_template("privacy.html")
+
+@app.route("/addfunds")
+def addfunds():
+    """Add a $1000 to bank balance"""
+
+    return render_template("/")
 
 app.jinja_env.filters["usd"] = usd
 

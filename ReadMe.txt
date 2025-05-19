@@ -18,7 +18,7 @@ W3Schools
 -Researching Python abs() Function. (08/05/2025)
 -Researching Window confirm(). (10/05/2025)
 -Research on overflow: Auto. (17/05/2025)
--Researching how to place text over images in BootStrap. (18/05/2025)
+-Researching how to place text over images. (18/05/2025)
 
 https://chatgpt.com/
 Chat GPT
