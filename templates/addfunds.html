@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add Funds
+{% endblock %}
+
+{% block main %}
+    <div>
+        <h4>{{ user_cash }}</h4>
+    </div>
+    <form action="/addfunds" method="post">
+        <div class="mb-3">
+            <input type="number" name="cash" min="1">
+        </div>
+        <button class="btn btn-primary" type="submit">Confirm</button>
+    </form>
+
+    <div class="text-center mt-5">
+        <h4><a href="/account">Go to account</a></h4>
+    </div>
+{% endblock %}

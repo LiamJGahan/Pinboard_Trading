@@ -580,6 +580,7 @@ def password():
 
     user_id = session.get("user_id")
 
+    # Check user_id not null
     if user_id == None:
         return apology("Must log in", 400)
 
@@ -637,11 +638,63 @@ def privacy():
 
     return render_template("privacy.html")
 
-@app.route("/addfunds")
+@app.route("/addfunds", methods=["GET", "POST"])
 def addfunds():
-    """Add a $1000 to bank balance"""
+    """Add funds to bank balance"""
 
-    return render_template("/")
+    user_id = session.get("user_id")
+    connection = create_connection()
+
+    # Check user_id not null
+    if user_id == None:
+        return apology("Must log in", 400)
+    
+    # Get user
+    cursor = connection.cursor()
+    user = cursor.execute(
+        "SELECT * FROM users WHERE id = %s", (user_id,)
+    )
+    user = cursor.fetchone()
+    cursor.close()
+
+    # Check user exists
+    if not user:
+        connection.close()
+        return apology("user is invalid", 500)
+
+    if request.method == "POST":
+
+        cash = request.form.get("cash")
+
+        # Check cash are intergers
+        try:
+            int(cash)
+        except:
+            connection.close()
+            return apology("must provide integers for cash", 400)
+
+        # Check funds not below 0
+        if (int(cash) <= 0):
+            connection.close()
+            return apology("amount must be higher than 0", 400)
+  
+        # Sum new balance
+        sum = int(cash) + user["cash"]
+        
+        # Update cash balance
+        cursor2 = connection.cursor()
+        cursor2.execute("UPDATE users SET cash = %s WHERE id = %s", (sum, user_id))
+        connection.commit()
+
+        cursor2.close()
+        connection.close()
+
+        return redirect("/addfunds")
+
+    else:
+
+        connection.close()
+        return render_template("addfunds.html", user_cash=usd(user["cash"]))
 
 app.jinja_env.filters["usd"] = usd
 
