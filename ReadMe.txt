@@ -19,6 +19,7 @@ W3Schools
 -Researching Window confirm(). (10/05/2025)
 -Research on overflow: Auto. (17/05/2025)
 -Researching how to place text over images. (18/05/2025)
+-Research on transitions. (21/05/2025)
 
 https://chatgpt.com/
 Chat GPT
@@ -57,7 +58,7 @@ ttl255.com
 
 https://www.favicon.cc/
 favicon.cc
--Favicon creation (28/04/2025)
+-Favicon creation. (28/04/2025)
 
 https://www.alphavantage.co
 Alphavantage
@@ -123,3 +124,15 @@ https://docs.rewst.help/documentation/jinja/list-of-jinja-filters
 https://www.pexels.com
 Pexels
 -Photo by Alesia  Kozik: https://www.pexels.com/photo/graph-of-the-movement-of-the-value-of-bitcoin-6770775/ (17/05/2025)
+
+https://github.com/SortableJS/Sortable
+SortableJS
+-Researched SortableJS. (20/05/2025)
+
+https://www.kryogenix.org/code/browser/custom-drag-image.html
+Kryogenix.org
+-Researching how to set custom ghost image for drag and drop. (20/05/2025)
+
+https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API
+Mozilla
+-Researching drag and drop in html. (21/05/2025)

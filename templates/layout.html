@@ -83,6 +83,16 @@
                     document.querySelector('form[action="https://validator.w3.org/check"] > input[name="fragment"]').value = html;
                 });
             </script>
+            <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+            <script>
+                new Sortable(document.getElementById('draggable'), {
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                onStart: function (event) {
+                    event.originalEvent.dataTransfer.setDragImage(event.item, 0, 0);
+                }
+                });
+            </script>
         </footer>
 
     </body>

@@ -2,3 +2,20 @@ body
 {
     background-color: antiquewhite !important;
 }
+
+.draggable-card 
+{
+    cursor: move;
+}
+
+.sortable-ghost {
+    opacity: 0; 
+}
+
+.sortable-chosen 
+{
+    transform: scale(1.02);
+    transition: transform ease;
+    transition-delay: 0.1s;
+    z-index: 1000;
+}
