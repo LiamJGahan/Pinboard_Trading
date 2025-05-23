@@ -50,6 +50,7 @@ bmaupin
 https://github.com/SJK9476?tab=repositories
 LiamJGahan
 -Researching various code snippets with previous work I have done. (25/04/2025)
+-Viewing prevoius JS fetch examples. (21/05/2025)
 
 https://ttl255.com/jinja2-tutorial-part-2-loops-and-conditionals/
 ttl255.com
@@ -133,6 +134,7 @@ https://www.kryogenix.org/code/browser/custom-drag-image.html
 Kryogenix.org
 -Researching how to set custom ghost image for drag and drop. (20/05/2025)
 
-https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API
+https://developer.mozilla.org/en-US/docs
 Mozilla
 -Researching drag and drop in html. (21/05/2025)
+-Research on fetch. (22/05/2025)

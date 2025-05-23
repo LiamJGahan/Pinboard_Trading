@@ -90,6 +90,22 @@
                 ghostClass: 'sortable-ghost',
                 onStart: function (event) {
                     event.originalEvent.dataTransfer.setDragImage(event.item, 0, 0);
+                },
+                onEnd: function (event) {
+                const cardOrder = [];
+                document.querySelectorAll('#draggable .draggable-card').forEach(element => {
+                    cardOrder.push(element.getAttribute('order-symbol'));
+                });
+
+                // Send new order to API
+                fetch('/update_order', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ order: cardOrder }),
+                })
+                .catch(error => console.error(error));
                 }
                 });
             </script>

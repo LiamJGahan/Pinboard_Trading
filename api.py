@@ -1,5 +1,5 @@
 from helpers import apology, lookup, lookup_overview, update_cards, usd
-from flask import Flask, flash, jsonify, redirect, render_template, request, session
+from flask import Flask, jsonify, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 import psycopg2
@@ -172,16 +172,23 @@ def index():
 
                 cursor = connection.cursor()
 
+                # Get the total stock count for this user
+                cursor.execute("SELECT MAX(position) AS max FROM stocks WHERE user_id = %s", (user_id,))
+                max = cursor.fetchone()
+
+                # If user has no stocks, start at 1
+                next_position = (max["max"] or 0) + 1
+
                 # Check if stock exists, if not, add a new one
                 cursor.execute("SELECT * FROM stocks WHERE user_id = %s AND symbol = %s", (user_id, symbol))
                 stock = cursor.fetchone()
 
                 if not stock:
                     cursor.execute("""INSERT INTO stocks (user_id, symbol, name, price, industry, description, market_cap, analyst_target, 
-                    analyst_strong_buy, analyst_buy, analyst_hold, analyst_sell, analyst_strong_sell)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (user_id, card["symbol"], card["name"], card["price"], card["industry"], 
+                    analyst_strong_buy, analyst_buy, analyst_hold, analyst_sell, analyst_strong_sell, position)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (user_id, card["symbol"], card["name"], card["price"], card["industry"], 
                     card["description"], card["market_cap"], card["analyst_target"], card["analyst_strong_buy"], card["analyst_buy"], card["analyst_hold"],
-                    card["analyst_sell"], card["analyst_strong_sell"]))
+                    card["analyst_sell"], card["analyst_strong_sell"], next_position))
                     connection.commit()
 
                 cursor.close()
@@ -191,7 +198,7 @@ def index():
 
         # Get stocks and transactions
         cursor2 = connection.cursor()
-        cursor2.execute("SELECT symbol, name, price, timestamp FROM stocks WHERE user_id = %s", (user_id,))
+        cursor2.execute("SELECT symbol, name, price, timestamp FROM stocks WHERE user_id = %s ORDER BY position ASC", (user_id,))
         cards = cursor2.fetchall()
         transactions = cursor2.execute("SELECT symbol, shares, transaction_total FROM transactions WHERE user_id = %s", (user_id,))
         transactions = cursor2.fetchall()
@@ -647,6 +654,7 @@ def addfunds():
 
     # Check user_id not null
     if user_id == None:
+        connection.close()
         return apology("Must log in", 400)
     
     # Get user
@@ -695,6 +703,47 @@ def addfunds():
 
         connection.close()
         return render_template("addfunds.html", user_cash=usd(user["cash"]))
+    
+
+@app.route('/update_order', methods=['POST'])
+def update_order():
+
+    user_id = session.get("user_id")
+    connection = create_connection()
+
+    # Check user_id not null
+    if user_id == None:
+        connection.close()
+        return apology("Must log in", 400)
+
+    # Check card order not null
+    if 'order' not in request.json:
+        connection.close()
+        return apology("Card order not found", 500)
+
+    # Get card order
+    card_order = request.json['order'] 
+
+    cursor = connection.cursor()
+
+    try:
+        # Reorder cards
+        for i, symbol in enumerate(card_order, start=1):
+            cursor.execute(
+                "UPDATE stocks SET position = %s WHERE user_id = %s AND symbol = %s",
+                (i, user_id, symbol)
+            )
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+    except Exception as e:
+        connection.rollback()
+
+        cursor.close()
+        connection.close()
+        return apology("Card order not saved", 500)
 
 app.jinja_env.filters["usd"] = usd
 
