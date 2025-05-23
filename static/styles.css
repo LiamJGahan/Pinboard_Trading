@@ -8,7 +8,8 @@ body
     cursor: move;
 }
 
-.sortable-ghost {
+.sortable-ghost 
+{
     opacity: 0; 
 }
 
@@ -18,4 +19,13 @@ body
     transition: transform ease;
     transition-delay: 0.1s;
     z-index: 1000;
+}
+
+.WelcomePic 
+{
+    background-image: url('/static/pexels-alesiakozik-6770775.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    position: relative;
 }

@@ -56,16 +56,13 @@
             </div>
             {% endif %}
         {% else %}
-        <div class="container">
-            <img src="static/pexels-alesiakozik-6770775.jpg" alt="Computer" style="width:100%;">
-            <div class="centered">
-                <div class="position-absolute top-50 start-50 translate-middle text-white">
+            <div class="WelcomePic d-flex align-items-center justify-content-center text-center text-white">
+                <div>
                     <p class="display-3">Welcome to Pinboard</p>
                     <p class="display-5 mb-5">stocks made easy</p>
                     <a href="/login" class="btn btn-lg btn-light px-4 py-2 fs-4">Login to start trading</a>
                 </div>
             </div>
-        </div>
         {% endif %}
     </div>
 {% endblock %}
