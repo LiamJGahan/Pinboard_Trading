@@ -492,12 +492,7 @@ def analytics(symbol=None):
     # Get transactions
     transactions = cursor.execute("SELECT shares, transaction_total, transaction_date FROM transactions WHERE user_id = %s AND symbol = %s", (user_id, symbol))
     transactions = cursor.fetchall()
-    cursor.close()
-
-    # Check transactions
-    if not transactions:
-        connection.close()
-        return apology("transactions not found", 500)   
+    cursor.close()   
 
     connection.close()
 

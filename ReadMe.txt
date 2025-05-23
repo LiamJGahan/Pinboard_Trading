@@ -138,3 +138,7 @@ https://developer.mozilla.org/en-US/docs
 Mozilla
 -Researching drag and drop in html. (21/05/2025)
 -Research on fetch. (22/05/2025)
+
+https://stackoverflow.com/questions/335516/simple-javascript-problem-onclick-confirm-not-preventing-default-action
+stackoverflow
+- Fixing bug caused by confirm() where cancel would still delete a card. (23/05/2025)
