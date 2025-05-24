@@ -5,20 +5,32 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/username" method="post">
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" name="newusername" placeholder="New Username" type="text">
-        </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" name="confirmation" placeholder="Confirm New Username" type="text">
-        </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" name="password" placeholder="Enter Password" type="password">
-        </div>
-        <button class="btn btn-primary" type="submit">Confirm</button>
-    </form>
 
-    <div class="text-center mt-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-sm-8 col-md-6 col-lg-4 d-flex">
+                <div class="card text-center mb-5 w-100 shadow border-secondary p-4">
+
+                    <form action="/username" method="post">
+                        <div class="mb-3">
+                            <input class="form-control mx-auto w-auto" name="newusername" placeholder="New Username" type="text">
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control mx-auto w-auto" name="confirmation" placeholder="Confirm New Username" type="text">
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control mx-auto w-auto" name="password" placeholder="Enter Password" type="password">
+                        </div>
+                        <button class="btn btn-primary" type="submit">Confirm</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
         <h4><a href="/account">Go to account</a></h4>
     </div>
+
 {% endblock %}

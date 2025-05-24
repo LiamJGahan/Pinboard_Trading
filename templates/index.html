@@ -21,7 +21,7 @@
 {% block main %}
     <div class="container">
         {% if session.get("user_id") %}
-        <div class="row justify-content-center" id="draggable"">
+        <div class="row justify-content-center" id="draggable">
             {% for card in card_list %}
             <div class="col-sm-6 col-md-4 col-lg-3 d-flex draggable-card" order-symbol="{{ card.symbol }}">
                 <div class="card text-center mb-4 w-100 shadow border-secondary">
@@ -56,7 +56,7 @@
             </div>
             {% endif %}
         {% else %}
-            <div class="WelcomePic d-flex align-items-center justify-content-center text-center text-white">
+            <div class="WelcomePic d-flex align-items-center justify-content-center text-center text-white rounded-pill">
                 <div>
                     <p class="display-3">Welcome to Pinboard</p>
                     <p class="display-5 mb-5">stocks made easy</p>

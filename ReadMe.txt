@@ -142,4 +142,8 @@ Mozilla
 
 https://stackoverflow.com/questions/335516/simple-javascript-problem-onclick-confirm-not-preventing-default-action
 stackoverflow
-- Fixing bug caused by confirm() where cancel would still delete a card. (23/05/2025)
+-Fixing bug caused by confirm() where cancel would still delete a card. (23/05/2025)
+
+https://www.geeksforgeeks.org/how-to-make-an-image-rounded-in-bootstrap/
+Geeksforgeeks
+-Researched how to round the corners of an image using bootstrap. (23/05/2025)

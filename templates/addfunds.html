@@ -5,17 +5,29 @@
 {% endblock %}
 
 {% block main %}
-    <div>
-        <h4>{{ user_cash }}</h4>
-    </div>
-    <form action="/addfunds" method="post">
-        <div class="mb-3">
-            <input type="number" name="cash" min="1">
-        </div>
-        <button class="btn btn-primary" type="submit">Confirm</button>
-    </form>
 
-    <div class="text-center mt-5">
-        <h4><a href="/account">Go to account</a></h4>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-sm-8 col-md-6 col-lg-4 d-flex">
+                <div class="card text-center mb-5 w-100 shadow border-secondary p-4">
+
+                    <div>
+                        <h4>{{ user_cash }}</h4>
+                    </div>
+                    <form action="/addfunds" method="post">
+                        <div class="mb-3">
+                            <input type="number" name="cash" min="1">
+                        </div>
+                        <button class="btn btn-primary" type="submit">Confirm</button>
+                    </form>  
+
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div class="text-center">
+        <h4><a href="/account">Go to account</a></h4>
+    </div>     
+
 {% endblock %}

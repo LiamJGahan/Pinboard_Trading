@@ -7,37 +7,41 @@
 
 {% block main %}
     <div class="container mt-4">
-    <div class="row">
-        <div class="col-md-5 d-flex flex-column">
-        <div class="card p-3 shadow border-secondary mb-3" style="height: 150px;">
-            <h5 class="pb-4">Bank Balance</h5>
-            <p>Total Cash: {{ cash }}</p>
-        </div>
+        <div class="row">
+            <div class="col-md-5 d-flex flex-column">
+            <div class="card p-3 shadow border-secondary mb-3" style="height: 150px;">
+                <h5 class="pb-4">Bank Balance</h5>
+                <p>Total Cash: {{ cash }}</p>
+            </div>
 
-        <div class="card p-3 shadow border-secondary" style="height: 550px; overflow-y: auto;">
-            <h5>Transaction History</h5>
-            <ul class="list-group list-group-flush">
-            {% for transaction in transactions %}
-                <li class="list-group-item">Amount: {{ transaction.shares }}/ Total: {{ transaction.transaction_total| usd }}/ Date: {{ transaction.transaction_date }}</li>
-            {% endfor %}
-            </ul>
-        </div>
-        </div>
+            <div class="card p-3 shadow border-secondary" style="height: 550px; overflow-y: auto;">
+                <h5>Transaction History</h5>
+                <ul class="list-group list-group-flush">
+                {% for transaction in transactions %}
+                    <li class="list-group-item">Amount: {{ transaction.shares }}/ Total: {{ transaction.transaction_total| usd }}/ Date: {{ transaction.transaction_date }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+            </div>
 
-        <div class="col-md-7 d-flex flex-column">
-        <div class="card p-3 shadow border-secondary mb-3 d-flex justify-content-center align-items-center" style="height: 550px;">
-            <div style="width: 500px; height: 500px;">
-            <canvas id="analystChart" width="500" height="500"></canvas>
+            <div class="col-md-7 d-flex flex-column">
+            <div class="card p-3 shadow border-secondary mb-3 d-flex justify-content-center align-items-center" style="height: 550px;">
+                <div style="width: 500px; height: 500px;">
+                <canvas id="analystChart" width="500" height="500"></canvas>
+                </div>
+            </div>
+
+            <div class="card p-3 shadow border-secondary" style="height: 150px; overflow-y: auto;">
+                <h5>Description</h5>
+                <p>{{ stock.description }}</p>
+            </div>
             </div>
         </div>
+    </div>
 
-        <div class="card p-3 shadow border-secondary" style="height: 150px; overflow-y: auto;">
-            <h5>Description</h5>
-            <p>{{ stock.description }}</p>
-        </div>
-        </div>
-    </div>
-    </div>
+    <div class="text-center mt-5">
+        <h4><a href="/">Go to pinboard</a></h4>
+    </div>  
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
