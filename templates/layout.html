@@ -88,6 +88,8 @@
                 new Sortable(document.getElementById('draggable'), {
                 animation: 150,
                 ghostClass: 'sortable-ghost',
+                touchStartThreshold: 5,
+
                 onStart: function (event) {
                     event.originalEvent.dataTransfer.setDragImage(event.item, 0, 0);
                 },

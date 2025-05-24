@@ -130,6 +130,7 @@ Pexels
 https://github.com/SortableJS/Sortable
 SortableJS
 -Researched SortableJS. (20/05/2025)
+-Reseaching a way to scroll properly on mobile using touchStartThreshold. (24/05/2025)
 
 https://www.kryogenix.org/code/browser/custom-drag-image.html
 Kryogenix.org
