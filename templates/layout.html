@@ -90,6 +90,7 @@
                 ghostClass: 'sortable-ghost',
                 delay: 2, 
 	            delayOnTouchOnly: true,
+                touchStartThreshold: 5,
 
                 onStart: function (event) {
                     event.originalEvent.dataTransfer.setDragImage(event.item, 0, 0);
