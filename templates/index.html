@@ -23,7 +23,7 @@
         {% if session.get("user_id") %}
         <div class="row justify-content-center" id="draggable">
             {% for card in card_list %}
-            <div class="col-sm-6 col-md-4 col-lg-3 d-flex draggable-card" order-symbol="{{ card.symbol }}">
+            <div class="col-sm-6 col-md-4 col-lg-3 d-flex draggable-card" data-order-symbol="{{ card.symbol }}">
                 <div class="card text-center mb-4 w-100 shadow border-secondary">
     
                     <div class="card-title mt-2 border-bottom px-3 position-relative" style="height: 40px;">

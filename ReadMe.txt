@@ -21,6 +21,7 @@ W3Schools
 -Researching how to place text over images. (18/05/2025)
 -Research on transitions. (21/05/2025)
 -Research on CSS background. (23/05/2025)
+-Researched HTML data. (20/05/2025)
 
 https://chatgpt.com/
 Chat GPT

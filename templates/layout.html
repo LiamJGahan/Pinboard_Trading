@@ -103,7 +103,7 @@
                 onEnd: function (event) {
                 const cardOrder = [];
                 document.querySelectorAll('#draggable .draggable-card').forEach(element => {
-                    cardOrder.push(element.getAttribute('order-symbol'));
+                    cardOrder.push(element.getAttribute('data-order-symbol'));
                 });
 
                 // Send new order to API
