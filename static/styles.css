@@ -6,7 +6,7 @@ body
 .draggable-card 
 {
     cursor: move;
-    touch-action: auto;
+    touch-action: pan-y;
 }
 
 .sortable-ghost 

@@ -9,17 +9,45 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-sm-8 col-md-6 col-lg-4 d-flex">
+                <div class="card text-center mb-3 w-100 shadow border-secondary p-4">
+
+                    <div class="text-center">
+                        <h5>Logged in as: {{ username }}</h5>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-sm-8 col-md-6 col-lg-4 d-flex">
+                <div class="card text-center mb-3 w-100 shadow border-secondary p-4">
+
+                    <div>
+                        <h5 class="pb-2">Bank Balance</h5>
+                    </div>
+                    <div>
+                        <p>Total Cash: {{ cash }}</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-sm-8 col-md-6 col-lg-4 d-flex">
                 <div class="card text-center mb-5 w-100 shadow border-secondary p-4">
 
                     <div class="text-center">
-                        <h4><a href="/username">Change Username</a></h4>
+                        <h5>Options</h5>
                     </div>
-                    <div class="text-center mt-5">
-                        <h4><a href="/password">Change Password</a></h4>
-                    </div>
-                    <div class="text-center mt-5">
-                        <h4><a href="/addfunds">Add funds to account</a></h4>
-                    </div>          
+                    <a class="btn btn-secondary text-center mt-5" href="/username">Change Username</a>
+                    <a class="btn btn-secondary text-center mt-3" href="/password">Change Password</a>
+                    <a class="btn btn-secondary text-center mt-3" href="/addfunds">Add funds to account</a>     
 
                 </div>
             </div>

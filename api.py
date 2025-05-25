@@ -368,7 +368,7 @@ def trade(symbol=None):
         total = price * amount
 
         connection.close()
-        return render_template("trade.html", symbol=symbol, price=usd(price), amount=amount, total=usd(total))
+        return render_template("trade.html", symbol=symbol, price=usd(price), amount=amount, total=usd(total), cash=usd(user["cash"]))
 
 
 @app.route("/remove_stock/<symbol>", methods=["GET", "POST"])
@@ -504,7 +504,23 @@ def analytics(symbol=None):
 def account():
     """Manage Account"""
 
-    return render_template("account.html")
+    user_id = session.get("user_id")
+    connection = create_connection()
+
+    # Check user_id not null
+    if user_id == None:
+        connection.close()
+        return apology("Must log in", 400)
+
+    # Get user
+    cursor = connection.cursor()
+    cursor.execute(
+        "SELECT username, cash FROM users WHERE id = %s", (user_id,)
+    )
+    user = cursor.fetchone()
+    cursor.close()
+
+    return render_template("account.html", username=user["username"], cash=usd(user["cash"]))
 
 @app.route("/username", methods=["GET", "POST"])
 def username():
@@ -654,7 +670,7 @@ def addfunds():
     
     # Get user
     cursor = connection.cursor()
-    user = cursor.execute(
+    cursor.execute(
         "SELECT * FROM users WHERE id = %s", (user_id,)
     )
     user = cursor.fetchone()
@@ -742,6 +758,6 @@ def update_order():
 
 app.jinja_env.filters["usd"] = usd
 
-# Remove for deployment
-if __name__ == '__main__':
-    app.run(port=5002)
+# # Remove for deployment
+# if __name__ == '__main__':
+#     app.run(port=5002)
