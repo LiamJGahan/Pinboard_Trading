@@ -742,6 +742,6 @@ def update_order():
 
 app.jinja_env.filters["usd"] = usd
 
-# # Remove for deployment
-# if __name__ == '__main__':
-#     app.run(port=5002)
+# Remove for deployment
+if __name__ == '__main__':
+    app.run(port=5002)
