@@ -4,7 +4,7 @@ from functools import wraps
 from dotenv import load_dotenv
 import os
 import requests
-from werkzeug.security import generate_password_hash
+from decimal import Decimal
 
 load_dotenv()
 api_key = os.getenv('ALPHAVANTAGE_KEY')
@@ -133,14 +133,35 @@ def update_cards(rows, connection):
             
             price = lookup(stock["symbol"])
             overview = lookup_overview(stock["symbol"])
+            change = 0
+
 
             if price and overview:
                 updated_card = {**price, **overview, "timestamp": datetime.datetime.now()}
+                new_price = updated_card["price"]
 
                 cursor = connection.cursor()
+
+                # Fetch current stock for price comparison
+                cursor.execute("SELECT price FROM stocks WHERE user_id = %s AND symbol = %s", (user_id, stock["symbol"]))
+                current_stock = cursor.fetchone()
+
+                if current_stock["price"] is not None:
+                    old_price = current_stock["price"]  
+                else: 
+                    old_price = new_price
+
+                # Calculate the price change
+                if Decimal(new_price) > old_price:
+                    change = 1
+                elif Decimal(new_price) < old_price:
+                    change = -1
+                else:
+                    change = 0
+
                 cursor.execute("""UPDATE stocks SET name = %s, price = %s, industry = %s, description = %s, 
                                market_cap = %s, timestamp = %s, analyst_target = %s, analyst_strong_buy = %s, analyst_buy = %s
-                               , analyst_hold = %s ,analyst_sell = %s, analyst_strong_sell = %s WHERE user_id = %s AND symbol = %s""", 
+                               , analyst_hold = %s ,analyst_sell = %s, analyst_strong_sell = %s, change = %s WHERE user_id = %s AND symbol = %s""", 
                 (
                     updated_card["name"],
                     updated_card["price"],
@@ -154,6 +175,7 @@ def update_cards(rows, connection):
                     updated_card["analyst_hold"],
                     updated_card["analyst_sell"],
                     updated_card["analyst_strong_sell"],
+                    change,
                     user_id,
                     stock["symbol"]
                 ))
@@ -161,6 +183,7 @@ def update_cards(rows, connection):
 
                 cursor.close()
 
+# Citation - Harvardx CS50x Finance
 def usd(value):
     """Format value as USD."""
 

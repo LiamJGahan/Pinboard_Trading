@@ -94,6 +94,7 @@ BootStrap
 https://icons.getbootstrap.com/
 BootStrap icons
 -Found an icon for my card delete button. (01/05/2025)
+-Found icons for change in price. (26/05/2025)
 
 https://www.youtube.com/watch?app=desktop&v=UGtB7i9gD4s
 Coding Yaar

@@ -198,7 +198,7 @@ def index():
 
         # Get stocks and transactions
         cursor2 = connection.cursor()
-        cursor2.execute("SELECT symbol, name, price, timestamp FROM stocks WHERE user_id = %s ORDER BY position ASC", (user_id,))
+        cursor2.execute("SELECT symbol, name, price, change, timestamp FROM stocks WHERE user_id = %s ORDER BY position ASC", (user_id,))
         cards = cursor2.fetchall()
         transactions = cursor2.execute("SELECT symbol, shares, transaction_total FROM transactions WHERE user_id = %s", (user_id,))
         transactions = cursor2.fetchall()
@@ -227,7 +227,8 @@ def index():
                     "name": card["name"],
                     "price": usd(card["price"]),
                     "amount": amount,
-                    "total": usd(total)
+                    "total": usd(total),
+                    "change": card["change"]
                 })
         else:
             user_prompt = "Your Pinboard is empty, use the search bar above to pin a new card."
