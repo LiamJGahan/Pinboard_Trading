@@ -6,6 +6,9 @@
 
 {% block main %}
     <!-- https://memegen.link/ -->
-    <!-- https://knowyourmeme.com/memes/grumpy-cat -->
     <img alt="{{ top }}" class="border img-fluid" src="https://api.memegen.link/images/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?background=https://images.pexels.com/photos/2022077/pexels-photo-2022077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" title="{{ top }}">
+
+    <div class="text-center mt-5">
+        <a href="/" class="btn btn-lg btn-secondary px-4 py-2 fs-4 shadow">Go to pinboard</a>
+    </div>  
 {% endblock %}
