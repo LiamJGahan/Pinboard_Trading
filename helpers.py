@@ -147,17 +147,15 @@ def update_cards(rows, connection):
                 current_stock = cursor.fetchone()
 
                 if current_stock["price"] is not None:
-                    old_price = current_stock["price"]  
-                else: 
-                    old_price = new_price
-
-                # Calculate the price change
-                if Decimal(new_price) > old_price:
-                    change = 1
-                elif Decimal(new_price) < old_price:
-                    change = -1
+                    old_price = Decimal(current_stock["price"])
+                    if Decimal(new_price) > old_price:
+                        change = 1
+                    elif Decimal(new_price) < old_price:
+                        change = -1
+                    else:
+                        change = 0
                 else:
-                    change = 0
+                    change = None
 
                 cursor.execute("""UPDATE stocks SET name = %s, price = %s, industry = %s, description = %s, 
                                market_cap = %s, timestamp = %s, analyst_target = %s, analyst_strong_buy = %s, analyst_buy = %s

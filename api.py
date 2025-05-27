@@ -1,4 +1,4 @@
-from helpers import apology, lookup, lookup_overview, update_cards, usd
+from helpers import apology, login_required, lookup, lookup_overview, update_cards, usd
 from flask import Flask, jsonify, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -200,12 +200,18 @@ def index():
         cursor2 = connection.cursor()
         cursor2.execute("SELECT symbol, name, price, change, timestamp FROM stocks WHERE user_id = %s ORDER BY position ASC", (user_id,))
         cards = cursor2.fetchall()
-        transactions = cursor2.execute("SELECT symbol, shares, transaction_total FROM transactions WHERE user_id = %s", (user_id,))
-        transactions = cursor2.fetchall()
-        cursor2.close()
 
         # Update the index cards if new day
         update_cards(cards, connection)
+
+        # Get cards after update
+        cursor2.execute("SELECT symbol, name, price, change, timestamp FROM stocks WHERE user_id = %s ORDER BY position ASC", (user_id,))
+        cards = cursor2.fetchall()
+
+        # Get transactions
+        cursor2.execute("SELECT symbol, shares, transaction_total FROM transactions WHERE user_id = %s", (user_id,))
+        transactions = cursor2.fetchall()
+        cursor2.close()
 
         if cards:
             for card in cards:
@@ -239,6 +245,7 @@ def index():
 
 # Citation - Harvardx CS50x Finance (used as base, heavily modified)
 @app.route("/trade/<symbol>", methods=["GET", "POST"])
+@login_required 
 def trade(symbol=None):
     """Buy or sell stock"""
 
@@ -373,7 +380,7 @@ def trade(symbol=None):
 
 
 @app.route("/remove_stock/<symbol>", methods=["GET", "POST"])
-#@login_required
+@login_required
 def remove_stock(symbol=None):
 
     if not symbol or symbol == None:
@@ -452,6 +459,7 @@ def remove_stock(symbol=None):
 
 
 @app.route("/analytics/<symbol>", methods=["GET", "POST"])
+@login_required 
 def analytics(symbol=None):
     """Examine stock data"""
 
@@ -502,6 +510,7 @@ def analytics(symbol=None):
 
 
 @app.route("/account")
+@login_required 
 def account():
     """Manage Account"""
 
@@ -524,6 +533,7 @@ def account():
     return render_template("account.html", username=user["username"], cash=usd(user["cash"]))
 
 @app.route("/username", methods=["GET", "POST"])
+@login_required 
 def username():
     """Change Username"""
 
@@ -593,7 +603,7 @@ def username():
 
 # Citation - Harvardx CS50x Finance LiamJGahan (modified)
 @app.route("/password", methods=["GET", "POST"])
-#@login_required  TODO
+@login_required 
 def password():
     """Change Password"""
 
@@ -658,6 +668,7 @@ def privacy():
     return render_template("privacy.html")
 
 @app.route("/addfunds", methods=["GET", "POST"])
+@login_required 
 def addfunds():
     """Add funds to bank balance"""
 
@@ -718,6 +729,7 @@ def addfunds():
     
 
 @app.route('/update_order', methods=['POST'])
+@login_required 
 def update_order():
 
     user_id = session.get("user_id")
@@ -749,6 +761,7 @@ def update_order():
 
         cursor.close()
         connection.close()
+        return jsonify({"message": "Card updated"}), 200
 
     except Exception as e:
         connection.rollback()
