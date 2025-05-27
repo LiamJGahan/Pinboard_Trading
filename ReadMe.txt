@@ -1,3 +1,10 @@
+# Pinboard Trading
+#### Video Demo:  <URL HERE>
+#### Description:
+TODO
+
+## Citations & References
+
 https://cs50.harvard.edu/x/2025/psets/9/finance/
 CS50 Harvardx
 -(finance) Helper.py functions used a reference/base for (pinboard) helper.py. (7/4/2025)
