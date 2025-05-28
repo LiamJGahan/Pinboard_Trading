@@ -29,6 +29,7 @@ W3Schools
 -Research on transitions. (21/05/2025)
 -Research on CSS background. (23/05/2025)
 -Researched HTML data. (20/05/2025)
+-Researched oninput Event and textContent. (28/05/2025)
 
 https://chatgpt.com/
 Chat GPT
@@ -59,7 +60,7 @@ bmaupin
 https://github.com/SJK9476?tab=repositories
 LiamJGahan
 -Researching various code snippets with previous work I have done. (25/04/2025)
--Viewing prevoius JS fetch examples. (21/05/2025)
+-Viewing previous JS fetch examples. (21/05/2025)
 
 https://ttl255.com/jinja2-tutorial-part-2-loops-and-conditionals/
 ttl255.com

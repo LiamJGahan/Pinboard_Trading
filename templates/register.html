@@ -13,7 +13,8 @@
 
                     <form action="/register" method="post">
                         <div class="mb-3">
-                            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
+                            <small id="usernamecheck"></small>
+                            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text" oninput="input_check()">
                         </div>
                         <div class="mb-3">
                             <input class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password">
@@ -31,6 +32,42 @@
 
     <div class="text-center">
         <a href="/login" class="btn btn-lg btn-secondary px-4 py-2 fs-4 shadow">Go to Login</a>
-    </div>   
+    </div>  
+    
+    <script>
+        const usernameInput = document.getElementById("username");
+        const check = document.getElementById("usernamecheck");
+
+        async function input_check() {
+            const username = usernameInput.value;
+
+            // Check input not null
+            if (username.length === 0) {
+                check.textContent = "";
+                return;
+            }
+
+            try {
+                const response = await fetch("/check_username", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username: username })
+                });
+
+                const data = await response.json();
+
+                if (data.available) {
+                    check.textContent = "Username available";
+                    check.style.color = "green";
+                } else {
+                    check.textContent = "Username already taken";
+                    check.style.color = "red";
+                }
+            } catch (error) {
+                check.textContent = "Error checking username";
+                check.style.color = "orange";
+            }
+        }
+    </script>
 
 {% endblock %}

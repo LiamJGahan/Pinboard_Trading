@@ -91,13 +91,14 @@ def register():
 
     if request.method == "POST":
 
+        username = request.form.get("username")
+
         # Ensure username was submitted
-        if not request.form.get("username"):
+        if not username:
             connection.close()
             return apology("must enter new username", 400)
 
         cursor = connection.cursor()
-        username = request.form.get("username")
         username_taken = cursor.execute(
             "SELECT username FROM users WHERE username = %s", (username,)
         )
@@ -139,6 +140,24 @@ def register():
     else:
         connection.close()
         return render_template("register.html")
+
+
+@app.route("/check_username", methods=["POST"])
+def check_username():
+    username = request.json.get("username")
+
+    # Ensure username was submitted
+    if not username:
+        return jsonify({"available": False}), 400
+
+    connection = create_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT username FROM users WHERE username = %s", (username,))
+    username_taken = cursor.fetchone()
+    cursor.close()
+    connection.close()
+
+    return jsonify({"available": not bool(username_taken)})
 
 # index
 @app.route("/", methods=["GET", "POST"])
