@@ -36,7 +36,7 @@
     
     <script>
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const usernameInput = document.getElementById("username");
             const check = document.getElementById("usernamecheck");
 
@@ -70,6 +70,8 @@
                     check.style.color = "orange";
                 }
             }
+
+            usernameInput.addEventListener("input", input_check);
         });
 
     </script>
