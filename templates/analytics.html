@@ -46,27 +46,29 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const ctx = document.getElementById('analystChart');
-        const analystChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Strong Buy', 'Buy', 'Hold', 'Sell', 'Strong Sell'],
-                datasets: [{
-                    label: 'Analytic Ratings',
-                    data: {{ ratings | tojson}},
-                    backgroundColor: [
-                        'rgba(40, 167, 69, 0.7)',
-                        'rgba(75, 192, 192, 0.7)',
-                        'rgba(255, 206, 86, 0.7)',
-                        'rgba(153, 102, 255, 0.7)',
-                        'rgba(255, 99, 132, 0.7)'
-                    ],
-                    hoverOffset: 3,
-                }]
-            },
-            options: {
-                responsive: true
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('analystChart');
+            const analystChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Strong Buy', 'Buy', 'Hold', 'Sell', 'Strong Sell'],
+                    datasets: [{
+                        label: 'Analytic Ratings',
+                        data: {{ ratings | tojson}},
+                        backgroundColor: [
+                            'rgba(40, 167, 69, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(153, 102, 255, 0.7)',
+                            'rgba(255, 99, 132, 0.7)'
+                        ],
+                        hoverOffset: 3,
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
         });
     </script>
 {% endblock %}

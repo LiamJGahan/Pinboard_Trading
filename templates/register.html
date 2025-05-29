@@ -35,39 +35,43 @@
     </div>  
     
     <script>
-        const usernameInput = document.getElementById("username");
-        const check = document.getElementById("usernamecheck");
 
-        async function input_check() {
-            const username = usernameInput.value;
+        document.addEventListener('DOMContentLoaded', function() {
+            const usernameInput = document.getElementById("username");
+            const check = document.getElementById("usernamecheck");
 
-            // Check input not null
-            if (username.length === 0) {
-                check.textContent = "";
-                return;
-            }
+            async function input_check() {
+                const username = usernameInput.value;
 
-            try {
-                const response = await fetch("/check_username", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username: username })
-                });
-
-                const data = await response.json();
-
-                if (data.available) {
-                    check.textContent = "Username available";
-                    check.style.color = "green";
-                } else {
-                    check.textContent = "Username already taken";
-                    check.style.color = "red";
+                // Check input not null
+                if (username.length === 0) {
+                    check.textContent = "";
+                    return;
                 }
-            } catch (error) {
-                check.textContent = "Error checking username";
-                check.style.color = "orange";
+
+                try {
+                    const response = await fetch("/check_username", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username: username })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.available) {
+                        check.textContent = "Username available";
+                        check.style.color = "green";
+                    } else {
+                        check.textContent = "Username already taken";
+                        check.style.color = "red";
+                    }
+                } catch (error) {
+                    check.textContent = "Error checking username";
+                    check.style.color = "orange";
+                }
             }
-        }
+        });
+
     </script>
 
 {% endblock %}

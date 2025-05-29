@@ -85,38 +85,45 @@
             </script>
             <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
             <script>
-                new Sortable(document.getElementById('draggable'), {
-                animation: 150,
-                ghostClass: 'sortable-ghost',
-                delay: 100, 
-	            delayOnTouchOnly: true,
-                touchStartThreshold: 5,
 
-                // AutoScroll plugin for mobile
-                scroll: true,
-                scrollSensitivity: 80,
-                scrollSpeed: 60,
+                const draggables = document.getElementById('draggable');
 
-                onStart: function (event) {
-                    event.originalEvent.dataTransfer.setDragImage(event.item, 0, 0);
-                },
-                onEnd: function (event) {
-                const cardOrder = [];
-                document.querySelectorAll('#draggable .draggable-card').forEach(element => {
-                    cardOrder.push(element.getAttribute('data-order-symbol'));
-                });
+                if (draggables)
+                {
+                    new Sortable(draggables, {
+                    animation: 150,
+                    ghostClass: 'sortable-ghost',
+                    delay: 100, 
+                    delayOnTouchOnly: true,
+                    touchStartThreshold: 5,
 
-                // Send new order to API
-                fetch('/update_order', {
-                    method: 'POST',
-                    headers: {
-                    'Content-Type': 'application/json',
+                    // AutoScroll plugin for mobile
+                    scroll: true,
+                    scrollSensitivity: 80,
+                    scrollSpeed: 60,
+
+                    onStart: function (event) {
+                        event.originalEvent.dataTransfer.setDragImage(event.item, 0, 0);
                     },
-                    body: JSON.stringify({ order: cardOrder }),
-                })
-                .catch(error => console.error(error));
+                    onEnd: function (event) {
+                    const cardOrder = [];
+                    document.querySelectorAll('#draggable .draggable-card').forEach(element => {
+                        cardOrder.push(element.getAttribute('data-order-symbol'));
+                    });
+
+                    // Send new order to API
+                    fetch('/update_order', {
+                        method: 'POST',
+                        headers: {
+                        'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ order: cardOrder }),
+                    })
+                    .catch(error => console.error(error));
+                    }
+                    });
                 }
-                });
+                
             </script>
         </footer>
 
