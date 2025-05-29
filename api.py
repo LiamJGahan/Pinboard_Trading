@@ -686,6 +686,7 @@ def privacy():
 
     return render_template("privacy.html")
 
+
 @app.route("/addfunds", methods=["GET", "POST"])
 @login_required 
 def addfunds():

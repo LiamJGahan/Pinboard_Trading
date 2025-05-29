@@ -3,6 +3,18 @@
 #### Description:
 TODO
 
+
+please un-comment code found below in api.py for local sever
+
+if __name__ == '__main__':
+    app.run(port=5002)
+
+alternativley use the online Clever Cloud hosted link below
+
+Online version
+https://app-3c8fd804-a8bd-4e0f-ad40-add41e7a8f8a.cleverapps.io/
+
+
 ## Citations & References
 
 https://cs50.harvard.edu/x/2025/psets/9/finance/

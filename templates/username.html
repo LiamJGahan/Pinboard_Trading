@@ -13,7 +13,8 @@
 
                     <form action="/username" method="post">
                         <div class="mb-3">
-                            <input class="form-control mx-auto w-auto" name="newusername" placeholder="New Username" type="text">
+                            <small id="usernamecheck"></small>
+                            <input class="form-control mx-auto w-auto" name="newusername" placeholder="New Username" type="text" id="username">
                         </div>
                         <div class="mb-3">
                             <input class="form-control mx-auto w-auto" name="confirmation" placeholder="Confirm New Username" type="text">
@@ -32,5 +33,47 @@
     <div class="text-center">
         <a href="/account" class="btn btn-lg btn-secondary px-4 py-2 fs-4 shadow">Go to account</a>
     </div>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const usernameInput = document.getElementById("username");
+            const check = document.getElementById("usernamecheck");
+
+            async function input_check() {
+                const username = usernameInput.value;
+
+                // Check input not null
+                if (username.length === 0) {
+                    check.textContent = "";
+                    return;
+                }
+
+                try {
+                    const response = await fetch("/check_username", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username: username })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.available) {
+                        check.textContent = "Username available";
+                        check.style.color = "green";
+                    } else {
+                        check.textContent = "Username already taken";
+                        check.style.color = "red";
+                    }
+                } catch (error) {
+                    check.textContent = "Error checking username";
+                    check.style.color = "orange";
+                }
+            }
+
+            usernameInput.addEventListener("input", input_check);
+        });
+
+    </script>
 
 {% endblock %}
