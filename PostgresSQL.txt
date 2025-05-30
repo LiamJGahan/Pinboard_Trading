@@ -1,3 +1,5 @@
+Queries made in DBeaver
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT NOT NULL UNIQUE,
@@ -31,3 +33,33 @@ CREATE TABLE stocks (
 
 ALTER TABLE stocks
 ADD COLUMN market_cap NUMERIC;
+
+ALTER TABLE stocks
+ADD analyst_target NUMERIC,
+ADD analyst_strong_buy NUMERIC,
+ADD analyst_buy NUMERIC,
+ADD analyst_hold NUMERIC,
+ADD analyst_sell NUMERIC,
+ADD analyst_strong_sell NUMERIC;
+
+ALTER TABLE stocks
+ADD COLUMN position INTEGER;
+
+WITH ordered AS (
+  SELECT id, ROW_NUMBER() OVER (ORDER BY id) AS rn
+  FROM stocks
+)
+UPDATE stocks
+SET position = ordered.rn
+FROM ordered
+WHERE stocks.id = ordered.id;
+
+ALTER TABLE stocks
+ADD COLUMN change INTEGER;
+
+ALTER TABLE stocks
+ALTER COLUMN change SET DEFAULT 0;
+
+UPDATE stocks
+SET change = 0
+WHERE change IS NULL;
