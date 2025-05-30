@@ -1,71 +1,108 @@
 # Pinboard Trading
-#### Video Demo:  <(https://youtu.be/umCg9-xSZmQ)>
+#### Video Demo: https://youtu.be/umCg9-xSZmQ
 #### Description:
 
 Pinboard Trading is a practice trading web application built using Flask and PostgreSQL, inspired by CS50x’s Finance problem set. This project represents a reinterpretation of the original assignment, extending its functionality, user experience and interface design.
-Pinboard Trading allows users to simulate the buying and selling of stocks using real-world market data. Users can search for stock symbols using a search bar on the homepage (the “Index”), create interactive stock cards, and manage their portfolio with a user-friendly drag-and-drop interface. The application's key feature is its “pinboard” layout, each stock added is visualised as a card containing real-time data, trading options and performance indicators.
 
-Features
+Pinboard Trading allows users to simulate the buying and selling of stocks using real-world market data. Users can search for stock symbols using a search bar on the homepage (the “Index”), create interactive stock cards, and manage their portfolio with a user-friendly drag-and-drop interface. The application's key feature is its “pinboard” layout; each stock added is visualised as a card containing real-time data, trading options and performance indicators.
 
-Stock Cards
+---
+
+### Features
+
+#### Stock Cards
 Once a user searches for a stock symbol, a trading card is generated and added to their personal pinboard. Each card displays:
-Company symbol and name
-Current price
-Total shares held
-Total investment
-An icon showing the price movement compared to the previous day 
+
+- Company symbol and name  
+- Current price  
+- Total shares held  
+- Total investment  
+- An icon showing the price movement compared to the previous day  
 
 Cards can be reordered using SortableJS, which updates their position in the database to reflect the user’s preferences.
 
-Trading 
-Each card includes options to buy or sell additional shares. These actions are tracked in a transactions table, and the user’s cash balance is updated. A “quick sell/remove card” option, marked with a red x button, allows users to instantly sell all remaining stock and remove the card from their dashboard.
-Price Change Tracking
-To enhance user insight, each card features a small icon in the top-left corner reflecting the stock’s price change from the previous day. This is implemented by storing the previous closing price and comparing it to the latest closing price upon user login or daily refresh. This involved handling of when to update stored prices to avoid stale data, especially when the user is inactive.
+#### Trading  
+Each card includes options to buy or sell additional shares. These actions are tracked in a transactions table, and the user’s cash balance is updated. A “quick sell/remove card” option, marked with a red ❌ button, allows users to instantly sell all remaining stock and remove the card from their dashboard.
 
-Analytics Page
+#### Price Change Tracking  
+To enhance user insight, each card features a small icon in the top-left corner reflecting the stock’s price change from the previous day. This is implemented by storing the previous closing price and comparing it to the latest closing price upon user login or daily refresh. This involved handling when to update stored prices to avoid stale data, especially when the user is inactive.
+
+#### Analytics Page  
 A dedicated Analytics page provides further stock information. This includes a Chart.js doughnut chart representing analyst ratings (Strong Buy, Buy, Hold, Sell, Strong Sell), parsed and prepared in the backend for display. This required converting AlphaVantage's analyst rating data into a format suitable for Chart.js visualisation.
 
-User Account Management
+#### User Account Management  
 The application includes an Account page that lets users:
-Change their password
-Update their username (with username checks)
-Top up their cash balance for further trading
 
-Backend and Database
-Initially developed using an Aiven MySQL databse, the application was migrated to PostgreSQL hosted by Clever Cloud due to hosting limitations with Aiven. This required significant restructuring of database commands, including query syntax and connection handling. Despite the challenge, PostgreSQL provided better performance and integration for deployment.
-The backend is structured using Flask, and each route is protected by a @login_required decorator where necessary. The stocks table stores each user’s saved stock cards, along with price data, position (for ordering), and timestamps for tracking changes. The transactions table logs every buy or sell action, providing historical data for potential future features like performance tracking or graphing.
+- Change their password  
+- Update their username (with username checks)  
+- Top up their cash balance for further trading  
 
-API and Rate Limiting
-Market data is retrieved from the AlphaVantage API, which imposes strict rate limits. To manage this, API requests are spaced out logically, for example, the app only fetches new data for each stock if it's outdated or when the user triggers a relevant action (e.g., login or visiting analytics). This not only preserves quota but also improves loading speed by avoiding unnecessary calls.
+---
 
-User Interface and Experience
+### Backend and Database
+
+Initially developed using an Aiven MySQL database, the application was migrated to PostgreSQL hosted by Clever Cloud due to hosting limitations with Aiven. This required significant restructuring of database commands, including query syntax and connection handling. Despite the challenge, PostgreSQL provided better performance and integration for deployment.
+
+The backend is structured using Flask, and each route is protected by a `@login_required` decorator where necessary. The `stocks` table stores each user’s saved stock cards, along with price data, position (for ordering), and timestamps for tracking changes. The `transactions` table logs every buy or sell action, providing historical data for potential future features like performance tracking or graphing.
+
+---
+
+### API and Rate Limiting
+
+Market data is retrieved from the AlphaVantage API, which imposes strict rate limits. To manage this, API requests are spaced out logically — for example, the app only fetches new data for each stock if it's outdated or when the user triggers a relevant action (e.g., login or visiting analytics). This not only preserves quota but also improves loading speed by avoiding unnecessary calls.
+
+---
+
+### User Interface and Experience
+
 The frontend uses HTML, CSS, and JavaScript (including Fetch API and Chart.js), with Jinja templating from Flask. Special attention was given to mobile responsiveness and usability. Cards collapse into a list layout on smaller screens, and drag-and-drop functionality remains usable via SortableJS.
-The username availability check during registration and when updating the username is handled asynchronously using a separate /check_username route. The frontend calls this via Fetch on input change and updates the interface with appropriate feedback messages e.g., “Username available” or “Username already taken” coloured green or red respectively.
 
-Hosting
+The username availability check during registration and when updating the username is handled asynchronously using a separate `/check_username` route. The frontend calls this via Fetch on input change and updates the interface with appropriate feedback messages — e.g., “Username available” or “Username already taken” — coloured green or red respectively.
+
+---
+
+### Hosting
+
 The project is hosted on Clever Cloud, using their managed PostgreSQL and Python Flask support. This required environment configuration and the secure handling of API keys and database credentials via environment variables.
 
-Design Decisions
-Some important design decisions include:
-Choosing PostgreSQL over MySQL for better hosting compatibility.
-Using session-based card updates for responsiveness and performance.
-Limiting AlphaVantage API calls by tracking when prices were last updated.
-Avoiding large dependencies or JS frameworks, to keep the frontend lightweight and maintainable.
+---
 
-Conclusion
+### Design Decisions
+
+Some important design decisions include:
+
+- Choosing PostgreSQL over MySQL for better hosting compatibility  
+- Using session-based card updates for responsiveness and performance  
+- Limiting AlphaVantage API calls by tracking when prices were last updated  
+- Avoiding large dependencies or JS frameworks, to keep the frontend lightweight and maintainable  
+
+---
+
+### Conclusion
+
 Pinboard Trading represents an extension and reinterpretation of the CS50x Finance project. It combines practical frontend interactivity with solid backend logic and careful API/data handling. Through this project, I deepened my skills in Flask, REST APIs, PostgreSQL, JavaScript interactivity, and full-stack deployment.
 
+---
 
-To run locally, please uncomment the following lines below found in api.py
+### To run locally
+
+Please uncomment the following lines in `api.py`:
+
+```python
 
 if __name__ == '__main__':
     app.run(port=5002)
 
+```
+
 Alternativley use the online version linked below (Hosted by Clever Cloud)
 
-Online version
+### Online version
+
 https://app-3c8fd804-a8bd-4e0f-ad40-add41e7a8f8a.cleverapps.io/
 
+
+---
 
 ## Citations
 
