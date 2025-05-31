@@ -25,7 +25,7 @@ def create_connection():
         database=os.getenv('DB_NAME'),
         cursor_factory=RealDictCursor,
     )
-    return connection 
+    return connection
 
 # Citation - Harvardx CS50x Finance
 @app.route("/login", methods=["GET", "POST"])
@@ -44,7 +44,7 @@ def login():
         # Ensure password was submitted
         elif not request.form.get("password"):
             return apology("Must provide password", 400)
-       
+
         # Query database for username
         cur = create_connection()
         if cur:
@@ -57,7 +57,7 @@ def login():
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(
-            rows[0]["hash"], request.form.get("password") 
+            rows[0]["hash"], request.form.get("password")
         ):
             return apology("Invalid username and/or password", 400)
 
@@ -170,7 +170,7 @@ def index():
 
     # Check if user is signed in
     if user_id != None:
-        
+
         connection = create_connection()
 
         if request.method == "POST":
@@ -203,9 +203,9 @@ def index():
                 stock = cursor.fetchone()
 
                 if not stock:
-                    cursor.execute("""INSERT INTO stocks (user_id, symbol, name, price, industry, description, market_cap, analyst_target, 
+                    cursor.execute("""INSERT INTO stocks (user_id, symbol, name, price, industry, description, market_cap, analyst_target,
                     analyst_strong_buy, analyst_buy, analyst_hold, analyst_sell, analyst_strong_sell, position)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (user_id, card["symbol"], card["name"], card["price"], card["industry"], 
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (user_id, card["symbol"], card["name"], card["price"], card["industry"],
                     card["description"], card["market_cap"], card["analyst_target"], card["analyst_strong_buy"], card["analyst_buy"], card["analyst_hold"],
                     card["analyst_sell"], card["analyst_strong_sell"], next_position))
                     connection.commit()
@@ -213,7 +213,7 @@ def index():
                 cursor.close()
             else:
                 connection.close()
-                return apology("Alphavantage API limit reached", 503)        
+                return apology("Alphavantage API limit reached", 503)
 
         # Get stocks and transactions
         cursor2 = connection.cursor()
@@ -260,11 +260,11 @@ def index():
 
         connection.close()
 
-    return render_template("index.html", card_list=card_list, user_prompt=user_prompt)   
+    return render_template("index.html", card_list=card_list, user_prompt=user_prompt)
 
 # Citation - Harvardx CS50x Finance (used as base, heavily modified)
 @app.route("/trade/<symbol>", methods=["GET", "POST"])
-@login_required 
+@login_required
 def trade(symbol=None):
     """Buy or sell stock"""
 
@@ -287,7 +287,7 @@ def trade(symbol=None):
     if not user:
         connection.close()
         return apology("user not found, login again", 500)
-        
+
 
     # Get price and user
     cursor2 = connection.cursor()
@@ -353,7 +353,7 @@ def trade(symbol=None):
             remainder = user["cash"] + (price * abs(Decimal(shares)))
 
             cursor3.execute(
-                "INSERT INTO transactions (user_id, shares, symbol, price, transaction_total) VALUES (%s, %s, %s, %s, %s)", 
+                "INSERT INTO transactions (user_id, shares, symbol, price, transaction_total) VALUES (%s, %s, %s, %s, %s)",
                 (user_id, int(shares), symbol, price, price * abs(Decimal(shares)))
             )
 
@@ -363,10 +363,10 @@ def trade(symbol=None):
             remainder = user["cash"] - (price * Decimal(shares))
 
             cursor3.execute(
-                "INSERT INTO transactions (user_id, shares, symbol, price, transaction_total) VALUES (%s, %s, %s, %s, %s)", 
+                "INSERT INTO transactions (user_id, shares, symbol, price, transaction_total) VALUES (%s, %s, %s, %s, %s)",
                 (user_id, int(shares), symbol, price, -(price * Decimal(shares)))
             )
-        
+
         else:
             cursor3.close()
             connection.close()
@@ -455,7 +455,7 @@ def remove_stock(symbol=None):
 
         # Enter transaction into db
         cursor.execute(
-            "INSERT INTO transactions (user_id, shares, symbol, price, transaction_total) VALUES (%s, %s, %s, %s, %s)", 
+            "INSERT INTO transactions (user_id, shares, symbol, price, transaction_total) VALUES (%s, %s, %s, %s, %s)",
             (user_id, -int(amount_of_stock), symbol, price, -price * abs(amount_of_stock))
         )
 
@@ -478,11 +478,11 @@ def remove_stock(symbol=None):
 
 
 @app.route("/analytics/<symbol>", methods=["GET", "POST"])
-@login_required 
+@login_required
 def analytics(symbol=None):
     """Examine stock data"""
 
-    # Check symbol 
+    # Check symbol
     if not symbol or symbol == None:
         return apology("symbol not found", 500)
 
@@ -505,22 +505,22 @@ def analytics(symbol=None):
     # Check if user is null
     if not user:
         connection.close()
-        return apology("user not found, login again", 500)   
-    
+        return apology("user not found, login again", 500)
+
     # Get stock
-    cursor.execute("""SELECT name, price, description, market_cap, analyst_target, analyst_strong_buy, analyst_buy, analyst_hold, 
+    cursor.execute("""SELECT name, price, description, market_cap, analyst_target, analyst_strong_buy, analyst_buy, analyst_hold,
                     analyst_sell, analyst_strong_sell, timestamp FROM stocks WHERE user_id = %s AND symbol = %s""", (user_id, symbol))
     stock = cursor.fetchone()
 
     # Check if stock is null
     if not stock:
         connection.close()
-        return apology("stock not found", 500)   
+        return apology("stock not found", 500)
 
     # Get transactions
     transactions = cursor.execute("SELECT shares, transaction_total, transaction_date FROM transactions WHERE user_id = %s AND symbol = %s", (user_id, symbol))
     transactions = cursor.fetchall()
-    cursor.close()   
+    cursor.close()
 
     connection.close()
 
@@ -529,7 +529,7 @@ def analytics(symbol=None):
 
 
 @app.route("/account")
-@login_required 
+@login_required
 def account():
     """Manage Account"""
 
@@ -552,7 +552,7 @@ def account():
     return render_template("account.html", username=user["username"], cash=usd(user["cash"]))
 
 @app.route("/username", methods=["GET", "POST"])
-@login_required 
+@login_required
 def username():
     """Change Username"""
 
@@ -576,7 +576,7 @@ def username():
         if request.form.get("newusername") != request.form.get("confirmation"):
             connection.close()
             return apology("new username does not match", 400)
-        
+
         # Check new password not null
         if not request.form.get("password"):
             connection.close()
@@ -587,7 +587,7 @@ def username():
         user = cursor.execute(
             "SELECT * FROM users WHERE id = %s", (user_id,)
         )
-        user = cursor.fetchone()       
+        user = cursor.fetchone()
 
         # Check password is correct and user exists
         if not user or not check_password_hash(
@@ -596,7 +596,7 @@ def username():
             cursor.close()
             connection.close()
             return apology("user or password is invalid", 400)
-        
+
         # Check if username already exists
         cursor.execute("SELECT * FROM users WHERE username = %s", (request.form.get("newusername"),))
         existing = cursor.fetchone()
@@ -622,7 +622,7 @@ def username():
 
 # Citation - Harvardx CS50x Finance LiamJGahan (modified)
 @app.route("/password", methods=["GET", "POST"])
-@login_required 
+@login_required
 def password():
     """Change Password"""
 
@@ -639,13 +639,13 @@ def password():
         # Check old password not null
         if not request.form.get("oldpassword"):
             connection.close()
-            return apology("must enter old password", 400)  
+            return apology("must enter old password", 400)
 
         # Check new password not null
         if not request.form.get("newpassword"):
             connection.close()
             return apology("must enter new password", 400)
-        
+
         # Check new passwords match
         if request.form.get("newpassword") != request.form.get("confirmation"):
             connection.close()
@@ -688,7 +688,7 @@ def privacy():
 
 
 @app.route("/addfunds", methods=["GET", "POST"])
-@login_required 
+@login_required
 def addfunds():
     """Add funds to bank balance"""
 
@@ -699,7 +699,7 @@ def addfunds():
     if user_id == None:
         connection.close()
         return apology("Must log in", 400)
-    
+
     # Get user
     cursor = connection.cursor()
     cursor.execute(
@@ -728,10 +728,10 @@ def addfunds():
         if (int(cash) <= 0):
             connection.close()
             return apology("amount must be higher than 0", 400)
-  
+
         # Sum new balance
         sum = int(cash) + user["cash"]
-        
+
         # Update cash balance
         cursor2 = connection.cursor()
         cursor2.execute("UPDATE users SET cash = %s WHERE id = %s", (sum, user_id))
@@ -746,10 +746,10 @@ def addfunds():
 
         connection.close()
         return render_template("addfunds.html", user_cash=usd(user["cash"]))
-    
+
 
 @app.route('/update_order', methods=['POST'])
-@login_required 
+@login_required
 def update_order():
 
     user_id = session.get("user_id")
@@ -766,7 +766,7 @@ def update_order():
         return apology("Card order not found", 500)
 
     # Get card order
-    card_order = request.json['order'] 
+    card_order = request.json['order']
 
     cursor = connection.cursor()
 
@@ -792,6 +792,6 @@ def update_order():
 
 app.jinja_env.filters["usd"] = usd
 
-# # Remove for deployment
-# if __name__ == '__main__':
-#     app.run(port=5002)
+# Remove for deployment
+if __name__ == '__main__':
+    app.run(port=5002)
